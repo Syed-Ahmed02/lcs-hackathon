@@ -16,7 +16,7 @@ export default function Home() {
           <div className="mx-auto flex size-12 items-center justify-center rounded-xl bg-primary/10">
             <ShieldCheck className="size-6 text-primary" />
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight">FocusGuard</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">FocusFlow</h1>
           <p className="text-sm text-muted-foreground">
             Stay on task. Track your browsing habits and block distractions during focus sessions.
           </p>

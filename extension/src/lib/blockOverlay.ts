@@ -99,7 +99,7 @@
         font-size: 0.6875rem;
         color: rgba(255,255,255,0.2);
         margin: 1.25rem 0 0;
-      ">FocusGuard</p>
+      ">FocusFlow</p>
     </div>
 
     <style>
