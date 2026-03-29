@@ -37,11 +37,22 @@ export function LinkAccount({ onLinked }: Props) {
 
   return (
     <div className="popup-body">
-      <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.55, textAlign: 'center' }}>
-        Open your dashboard, go to <strong style={{ color: 'rgba(255,255,255,0.75)' }}>Link Extension</strong>, and enter the code below.
-      </p>
+      <div className="link-hero">
+        <svg className="link-hero-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 17H7A5 5 0 0 1 7 7h2" />
+          <path d="M15 7h2a5 5 0 1 1 0 10h-2" />
+          <line x1="8" x2="16" y1="12" y2="12" />
+        </svg>
+        <p className="link-hero-title">Link to your dashboard</p>
+      </div>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+      <ol className="link-steps" aria-label="Steps to link your account">
+        <li>Open your <strong>FocusFlow dashboard</strong></li>
+        <li>Go to <strong>Link Extension</strong></li>
+        <li>Copy the 6-character code</li>
+      </ol>
+
+      <form onSubmit={handleSubmit} className="link-form">
         <div>
           <label htmlFor="link-code">Link Code</label>
           <input
@@ -55,10 +66,11 @@ export function LinkAccount({ onLinked }: Props) {
             autoFocus
             autoComplete="off"
             spellCheck={false}
+            aria-describedby={error ? 'link-error' : undefined}
           />
         </div>
 
-        {error && <p className="error-text">{error}</p>}
+        {error && <p id="link-error" className="error-text" role="alert">{error}</p>}
 
         <button type="submit" className="btn btn-primary" disabled={loading || code.trim().length !== 6}>
           {loading ? <><span className="spinner" /> Linking…</> : 'Link Account'}

@@ -117,24 +117,28 @@ export function SessionControls({ extensionToken, onUnlink }: Props) {
   if (session) {
     return (
       <div className="popup-body">
-        <div className="session-card">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.375rem' }}>
-            <span className="badge badge-allowed">Active</span>
-            <span className="session-meta">{elapsed}</span>
+        <div className="session-card session-card-active">
+          <div className="session-card-header">
+            <span className="badge badge-active">
+              <span className="pulse-dot" />
+              Active
+            </span>
+            <span className="session-timer" aria-live="polite" aria-label={`Elapsed time: ${elapsed}`}>{elapsed}</span>
           </div>
           {session.goalDescription && (
             <p className="session-goal">{session.goalDescription}</p>
           )}
+          <p className="session-hint">FocusFlow is monitoring your tabs</p>
         </div>
 
-        {error && <p className="error-text">{error}</p>}
+        {error && <p className="error-text" role="alert">{error}</p>}
 
         <button className="btn btn-danger" onClick={handleStop} disabled={actionLoading}>
           {actionLoading ? <><span className="spinner" /> Ending…</> : 'End Session'}
         </button>
 
         <hr className="divider" />
-        <button className="btn btn-ghost" onClick={onUnlink} style={{ alignSelf: 'center' }}>
+        <button className="btn btn-ghost btn-center" onClick={onUnlink}>
           Unlink account
         </button>
       </div>
@@ -143,7 +147,7 @@ export function SessionControls({ extensionToken, onUnlink }: Props) {
 
   return (
     <div className="popup-body">
-      <form onSubmit={handleStart} style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+      <form onSubmit={handleStart} className="session-form">
         <div>
           <label htmlFor="goal-input">Focus Goal</label>
           <textarea
@@ -156,7 +160,7 @@ export function SessionControls({ extensionToken, onUnlink }: Props) {
           />
         </div>
 
-        {error && <p className="error-text">{error}</p>}
+        {error && <p className="error-text" role="alert">{error}</p>}
 
         <button type="submit" className="btn btn-primary" disabled={actionLoading}>
           {actionLoading ? <><span className="spinner" /> Starting…</> : 'Start Focus Session'}
@@ -164,7 +168,7 @@ export function SessionControls({ extensionToken, onUnlink }: Props) {
       </form>
 
       <hr className="divider" />
-      <button className="btn btn-ghost" onClick={onUnlink} style={{ alignSelf: 'center' }}>
+      <button className="btn btn-ghost btn-center" onClick={onUnlink}>
         Unlink account
       </button>
     </div>
