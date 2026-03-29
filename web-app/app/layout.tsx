@@ -9,8 +9,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: {
-    default: "FocusGuard",
-    template: "%s · FocusGuard",
+    default: "FocusFlow",
+    template: "%s · FocusFlow",
   },
   description: "Stay on task. Track your browsing habits and block distractions during focus sessions.",
 };

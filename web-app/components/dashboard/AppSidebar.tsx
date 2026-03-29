@@ -74,7 +74,7 @@ export function AppSidebar() {
                 <ShieldCheck className="size-4" />
               </div>
               <div className="flex flex-col gap-0.5 leading-none">
-                <span className="font-semibold">FocusGuard</span>
+                <span className="font-semibold">FocusFlow</span>
                 <span className="text-xs text-muted-foreground">Dashboard</span>
               </div>
             </SidebarMenuButton>

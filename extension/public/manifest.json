@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Focus Guard",
+  "name": "FocusFlow",
   "version": "1.0.0",
   "description": "AI-powered focus session manager that blocks distracting tabs.",
 
@@ -15,7 +15,7 @@
 
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Focus Guard"
+    "default_title": "FocusFlow"
   },
 
   "web_accessible_resources": [

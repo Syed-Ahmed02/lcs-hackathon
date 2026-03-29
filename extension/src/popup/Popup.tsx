@@ -31,7 +31,7 @@ export function Popup() {
     <>
       <div className="popup-header">
         <span className="logo" aria-hidden="true">🛡</span>
-        <h1>FocusGuard</h1>
+        <h1>FocusFlow</h1>
       </div>
 
       {screen === 'loading' && (
