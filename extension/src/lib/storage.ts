@@ -49,7 +49,8 @@ export interface CachedDecision {
 export function buildCacheKey(url: string): string {
   try {
     const u = new URL(url)
-    return `cache:${u.origin}${u.pathname}`
+    u.hash = ''
+    return `cache:${u.origin}${u.pathname}${u.search}`
   } catch {
     return `cache:${url}`
   }
