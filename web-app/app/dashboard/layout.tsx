@@ -1,12 +1,14 @@
 "use client";
 
 import { useAuth } from "@workos-inc/authkit-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isLoading, user, signOut } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -26,7 +28,31 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-svh">
       <header className="border-border sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-          <span className="font-semibold">Focus Dashboard</span>
+          <div className="flex items-center gap-4">
+            <span className="font-semibold">Focus Dashboard</span>
+            <nav className="flex items-center gap-1">
+              <Link
+                href="/dashboard"
+                className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
+                  pathname === "/dashboard"
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Overview
+              </Link>
+              <Link
+                href="/dashboard/link"
+                className={`rounded-md px-3 py-1.5 text-sm transition-colors ${
+                  pathname === "/dashboard/link"
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Link Extension
+              </Link>
+            </nav>
+          </div>
           <div className="flex items-center gap-3">
             <span className="text-muted-foreground text-sm">{user.email}</span>
             <button
