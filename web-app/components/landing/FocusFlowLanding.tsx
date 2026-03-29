@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BarChart3, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
 import { VideoPlayer } from "@/components/ui/video-thumbnail-player";
+import { ScrollReveal } from "@/components/landing/scroll-reveal";
 
 function LogoMark({ className }: { className?: string }) {
   return (
@@ -19,20 +20,32 @@ function LogoMark({ className }: { className?: string }) {
 
 function Nav() {
   return (
-    <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-zinc-950/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-white/[0.06] bg-zinc-950/80 backdrop-blur-xl transition-[background-color,backdrop-filter] duration-300">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 rounded-lg outline-offset-2 transition-opacity duration-200 hover:opacity-90"
+        >
           <LogoMark className="size-8 rounded-lg [&_svg]:size-4" />
           <span className="text-sm font-semibold tracking-tight text-white">FocusFlow</span>
         </Link>
         <nav className="hidden items-center gap-8 text-sm text-zinc-400 md:flex">
-          <a href="#product" className="transition-colors hover:text-white">
+          <a
+            href="#product"
+            className="rounded-md transition-colors duration-200 ease-out hover:text-white"
+          >
             Product
           </a>
-          <a href="#analytics" className="transition-colors hover:text-white">
+          <a
+            href="#analytics"
+            className="rounded-md transition-colors duration-200 ease-out hover:text-white"
+          >
             Analytics
           </a>
-          <a href="#extension" className="transition-colors hover:text-white">
+          <a
+            href="#extension"
+            className="rounded-md transition-colors duration-200 ease-out hover:text-white"
+          >
             Extension
           </a>
         </nav>
@@ -70,7 +83,7 @@ function HeroAuth() {
         <>
           <Button
             size="lg"
-            className="h-12 min-w-[200px] rounded-full bg-zinc-200 px-8 text-base font-medium text-zinc-950 hover:bg-white"
+            className="h-12 min-w-[200px] rounded-full bg-zinc-200 px-8 text-base font-medium text-zinc-950 transition-[transform,background-color,box-shadow] duration-200 ease-out hover:bg-white motion-safe:hover:scale-[1.02] motion-safe:active:scale-[0.98]"
             render={<Link href="/dashboard" />}
           >
             Open dashboard
@@ -96,7 +109,7 @@ function HeroAuth() {
         <>
           <Button
             size="lg"
-            className="h-12 min-w-[220px] rounded-full bg-zinc-200 px-8 text-base font-medium text-zinc-950 hover:bg-white"
+            className="h-12 min-w-[220px] rounded-full bg-zinc-200 px-8 text-base font-medium text-zinc-950 transition-[transform,background-color] duration-200 ease-out hover:bg-white motion-safe:hover:scale-[1.02] motion-safe:active:scale-[0.98]"
             render={<Link href="/sign-up" />}
           >
             Get started free
@@ -104,7 +117,7 @@ function HeroAuth() {
           <Button
             size="lg"
             variant="outline"
-            className="h-12 min-w-[160px] rounded-full border-white/20 bg-transparent text-white hover:bg-white/10"
+            className="h-12 min-w-[160px] rounded-full border-white/20 bg-transparent text-white transition-[transform,background-color,border-color] duration-200 ease-out hover:bg-white/10 motion-safe:hover:scale-[1.02] motion-safe:active:scale-[0.98]"
             render={<Link href="/sign-in" />}
           >
             Sign in
@@ -138,13 +151,15 @@ function HeroShowcase() {
         <div className="relative mx-auto max-w-6xl">
           <div id="product" className="relative scroll-mt-28 pb-4">
             <div id="extension" className="mx-auto w-full max-w-2xl p-4">
-              <VideoPlayer
-                thumbnailUrl="https://images.unsplash.com/photo-1593642532454-e138e28a63f4?q=80&w=2069&auto=format&fit=crop"
-                videoUrl="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-                title="See FocusFlow in action"
-                description="Dashboard, focus sessions, and tab intelligence."
-                className="rounded-xl border border-white/10 shadow-2xl ring-1 ring-white/10"
-              />
+              <div className="animate-landing-fade-scale">
+                <VideoPlayer
+                  thumbnailUrl="https://images.unsplash.com/photo-1593642532454-e138e28a63f4?q=80&w=2069&auto=format&fit=crop"
+                  videoUrl="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                  title="See FocusFlow in action"
+                  description="Dashboard, focus sessions, and tab intelligence."
+                  className="rounded-xl border border-white/10 shadow-2xl ring-1 ring-white/10 transition-shadow duration-300 motion-safe:hover:shadow-[0_28px_80px_-20px_rgba(0,0,0,0.55)]"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -230,18 +245,18 @@ function Footer() {
               <ul className="mt-3 space-y-2 text-sm text-zinc-400">
                 <li>
                   <Authenticated>
-                    <Link href="/dashboard" className="hover:text-white">
+                    <Link href="/dashboard" className="transition-colors duration-200 hover:text-white">
                       Dashboard
                     </Link>
                   </Authenticated>
                   <Unauthenticated>
-                    <Link href="/sign-up" className="hover:text-white">
+                    <Link href="/sign-up" className="transition-colors duration-200 hover:text-white">
                       Dashboard
                     </Link>
                   </Unauthenticated>
                 </li>
                 <li>
-                  <a href="#extension" className="hover:text-white">
+                  <a href="#extension" className="transition-colors duration-200 hover:text-white">
                     Extension
                   </a>
                 </li>
@@ -251,12 +266,12 @@ function Footer() {
               <p className="text-xs font-medium tracking-wider text-zinc-500 uppercase">Account</p>
               <ul className="mt-3 space-y-2 text-sm text-zinc-400">
                 <li>
-                  <Link href="/sign-in" className="hover:text-white">
+                  <Link href="/sign-in" className="transition-colors duration-200 hover:text-white">
                     Sign in
                   </Link>
                 </li>
                 <li>
-                  <Link href="/sign-up" className="hover:text-white">
+                  <Link href="/sign-up" className="transition-colors duration-200 hover:text-white">
                     Create account
                   </Link>
                 </li>
@@ -283,16 +298,18 @@ export function FocusFlowLanding() {
           <section className="pb-0">
             <div className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 sm:pt-12">
               <div className="max-w-3xl">
-                
                 <h1 className="mt-5 text-pretty text-4xl font-medium leading-[1.12] tracking-tight sm:text-5xl sm:leading-[1.1]">
-                  <span className="block text-white">FocusFlow is the best way to own your attention 
+                  <span className="block text-white animate-landing-fade-up">
+                    FocusFlow is the best way to own your attention
                   </span>
-                
                 </h1>
-                <p className="mt-6 max-w-xl text-lg leading-relaxed text-zinc-400">
-                  Set a focus goal from the extension, stay on task with smarter tab decisions, and use our insights to improve over time
+                <p className="mt-6 max-w-xl text-lg leading-relaxed text-zinc-400 animate-landing-fade-up-delay-1">
+                  Set a focus goal from the extension, stay on task with smarter tab decisions, and use our insights to
+                  improve over time
                 </p>
-                <HeroAuth />
+                <div className="animate-landing-fade-up-delay-2">
+                  <HeroAuth />
+                </div>
               </div>
             </div>
             <HeroShowcase />
@@ -300,13 +317,15 @@ export function FocusFlowLanding() {
 
           <section className="border-y py-20">
             <div className="mx-auto max-w-6xl px-4 sm:px-6">
-              <p className="text-center font-mono text-xs tracking-widest text-zinc-500 uppercase">
-                Trusted by builders who ship
-              </p>
-              <h2 className="mx-auto mt-3 max-w-2xl text-center text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-                Your browser is where work happens.{" "}
-                <span className="text-zinc-500">We help it stay aligned with intent—not impulse.</span>
-              </h2>
+              <ScrollReveal>
+                <p className="text-center font-mono text-xs tracking-widest text-zinc-500 uppercase">
+                  Trusted by builders who ship
+                </p>
+                <h2 className="mx-auto mt-3 max-w-2xl text-center text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                  Your browser is where work happens.{" "}
+                  <span className="text-zinc-500">We help it stay aligned with intent—not impulse.</span>
+                </h2>
+              </ScrollReveal>
               <div className="mt-14 grid gap-6 md:grid-cols-3">
                 {[
                   {
@@ -324,17 +343,16 @@ export function FocusFlowLanding() {
                     title: "Honest analytics",
                     body: "Distraction rate, top domains, and per-session charts that reward consistency over vibes.",
                   },
-                ].map((f) => (
-                  <div
-                    key={f.title}
-                    className="rounded-2xl border border-white/10 bg-zinc-900/40 p-6 ring-1 ring-white/[0.03]"
-                  >
-                    <div className="flex size-10 items-center justify-center rounded-xl bg-white/5 text-[oklch(0.75_0.12_305)]">
-                      <f.icon className="size-5" />
+                ].map((f, i) => (
+                  <ScrollReveal key={f.title} delayMs={i * 70}>
+                    <div className="group rounded-2xl border border-white/10 bg-zinc-900/40 p-6 ring-1 ring-white/[0.03] transition-[transform,box-shadow,border-color] duration-300 ease-out motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-white/15 motion-safe:hover:shadow-lg">
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-white/5 text-[oklch(0.75_0.12_305)] transition-transform duration-300 motion-safe:group-hover:scale-105">
+                        <f.icon className="size-5" />
+                      </div>
+                      <h3 className="mt-4 font-semibold text-white">{f.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-zinc-500">{f.body}</p>
                     </div>
-                    <h3 className="mt-4 font-semibold text-white">{f.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-zinc-500">{f.body}</p>
-                  </div>
+                  </ScrollReveal>
                 ))}
               </div>
             </div>
@@ -342,34 +360,39 @@ export function FocusFlowLanding() {
 
           <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
             <div className="grid items-start gap-12 lg:grid-cols-2">
-              <div>
-                <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-                  History that reads like a story
-                </h2>
-                <p className="mt-4 text-zinc-400">
-                  Session duration bars, outcome breakdowns, and daily rhythm—so you can spot patterns, not just timestamps.
-                </p>
-                <ul className="mt-8 space-y-4 text-sm text-zinc-500">
-                  <li className="flex gap-3">
-                    <span className="mt-0.5 text-[oklch(0.65_0.2_302)]">→</span>
-                    Compare lengths and intensity across days
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="mt-0.5 text-[oklch(0.65_0.2_302)]">→</span>
-                    Understand completed vs interrupted sessions at a glance
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="mt-0.5 text-[oklch(0.65_0.2_302)]">→</span>
-                    Tie tab decisions back to the goal you set
-                  </li>
-                </ul>
-              </div>
-              <ChartsMock />
+              <ScrollReveal>
+                <div>
+                  <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                    History that reads like a story
+                  </h2>
+                  <p className="mt-4 text-zinc-400">
+                    Session duration bars, outcome breakdowns, and daily rhythm—so you can spot patterns, not just
+                    timestamps.
+                  </p>
+                  <ul className="mt-8 space-y-4 text-sm text-zinc-500">
+                    <li className="flex gap-3">
+                      <span className="mt-0.5 text-[oklch(0.65_0.2_302)]">→</span>
+                      Compare lengths and intensity across days
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="mt-0.5 text-[oklch(0.65_0.2_302)]">→</span>
+                      Understand completed vs interrupted sessions at a glance
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="mt-0.5 text-[oklch(0.65_0.2_302)]">→</span>
+                      Tie tab decisions back to the goal you set
+                    </li>
+                  </ul>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal delayMs={80}>
+                <ChartsMock />
+              </ScrollReveal>
             </div>
           </section>
 
           <section className="border-t border-white/[0.06] py-20">
-            <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+            <ScrollReveal className="mx-auto max-w-3xl px-4 text-center sm:px-6">
               <h2 className="text-2xl font-semibold text-white sm:text-3xl">Try FocusFlow</h2>
               <p className="mt-3 text-zinc-500">
                 Create an account, link the extension from your dashboard, and start your first focus session in minutes.
@@ -411,7 +434,7 @@ export function FocusFlowLanding() {
                   </Button>
                 </Authenticated>
               </div>
-            </div>
+            </ScrollReveal>
           </section>
         </main>
         <Footer />

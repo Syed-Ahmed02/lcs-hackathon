@@ -127,3 +127,55 @@
     @apply font-sans;
     }
 }
+
+/* FocusFlow landing — GPU-friendly entrance; disabled when user prefers reduced motion */
+@keyframes landing-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes landing-fade-scale {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@layer utilities {
+  .animate-landing-fade-up {
+    animation: landing-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .animate-landing-fade-up-delay-1 {
+    animation: landing-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.1s;
+  }
+  .animate-landing-fade-up-delay-2 {
+    animation: landing-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.18s;
+  }
+  .animate-landing-fade-scale {
+    animation: landing-fade-scale 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.22s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-landing-fade-up,
+  .animate-landing-fade-up-delay-1,
+  .animate-landing-fade-up-delay-2,
+  .animate-landing-fade-scale {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
