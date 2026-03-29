@@ -23,6 +23,17 @@ const BROAD_CONTENT_DOMAINS = [
   "linkedin.com",
 ] as const;
 
+const SEARCH_ENGINE_DOMAINS = [
+  "google.com",
+  "google.ca",
+  "google.co.uk",
+  "bing.com",
+  "duckduckgo.com",
+  "search.yahoo.com",
+  "scholar.google.com",
+  "wolframalpha.com",
+] as const;
+
 const GOAL_STOP_WORDS = new Set([
   "a",
   "an",
@@ -74,6 +85,13 @@ function hostMatchesBroadPlatform(domain: string): boolean {
   );
 }
 
+function isSearchEngine(domain: string): boolean {
+  const host = domain.toLowerCase();
+  return SEARCH_ENGINE_DOMAINS.some(
+    (candidate) => host === candidate || host.endsWith(`.${candidate}`),
+  );
+}
+
 function shouldAllowBroadPlatformPage(
   url: string,
   title: string,
@@ -110,6 +128,18 @@ async function classifyPageAlignment(
     return { decision: "allowed", reasoning: "No API key configured" };
   }
 
+  if (isSearchEngine(domain)) {
+    const keywords = extractGoalKeywords(goalDescription);
+    const haystack = normalizeText(`${url} ${title} ${pageContentExcerpt ?? ""}`.slice(0, 4000));
+    const hasGoalKeyword = keywords.length === 0 || keywords.some((kw) => haystack.includes(kw));
+    if (hasGoalKeyword) {
+      return {
+        decision: "allowed",
+        reasoning: "Search engine query related to session goal",
+      };
+    }
+  }
+
   if (
     shouldAllowBroadPlatformPage(
       url,
@@ -132,10 +162,12 @@ async function classifyPageAlignment(
     `You are a focus session enforcer. Decide if a webpage is aligned with the user's session goal. ` +
     `Reply with valid JSON only: {"decision":"allowed","reasoning":"..."} or {"decision":"blocked","reasoning":"..."}. ` +
     `Keep reasoning under 15 words. ` +
-    `Allow relevant educational, reference, research, or task-supporting pages even on usually distracting platforms. ` +
-    `Do not block a page only because the site is YouTube, Reddit, or social media if the title/content clearly matches the goal. ` +
-    `Use the page title and content as stronger evidence than the domain. ` +
-    `Block pages that are entertainment, scrolling, or off-goal.`;
+    `IMPORTANT RULES:\n` +
+    `- Allow search engines (Google, Bing, DuckDuckGo) when the search query relates to the goal.\n` +
+    `- Allow educational, reference, research, documentation, and task-supporting pages.\n` +
+    `- Do NOT block a page just because "reddit", "youtube", or other platform names appear in the search query or title. Judge the actual intent.\n` +
+    `- The page title and content are stronger evidence than the domain name.\n` +
+    `- Only block pages that are clearly entertainment, idle scrolling, or completely unrelated to the goal.`;
 
   const userPrompt =
     `Session goal: "${goal}"\n` +
