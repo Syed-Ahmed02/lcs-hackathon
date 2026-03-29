@@ -1,17 +1,10 @@
-import type { AuthConfig } from "convex/server";
-
 const clientId = process.env.WORKOS_CLIENT_ID;
-if (!clientId) {
-  throw new Error(
-    "WORKOS_CLIENT_ID is not set. Add it to your Convex deployment (Dashboard → Settings → Environment Variables, or `npx convex env set WORKOS_CLIENT_ID ...`).",
-  );
-}
 
-export default {
+const authConfig = {
   providers: [
     {
       type: "customJwt",
-      issuer: "https://api.workos.com/",
+      issuer: `https://api.workos.com/`,
       algorithm: "RS256",
       jwks: `https://api.workos.com/sso/jwks/${clientId}`,
       applicationID: clientId,
@@ -23,4 +16,6 @@ export default {
       jwks: `https://api.workos.com/sso/jwks/${clientId}`,
     },
   ],
-} satisfies AuthConfig;
+};
+
+export default authConfig;

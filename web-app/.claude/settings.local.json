@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find C:/Users/syeda/OneDrive/Desktop/Syed/Dev/lcs-hackathon/web-app/node_modules -name package.json -path *workos*)",
+      "Read(//c/Users/syeda/OneDrive/Desktop/Syed/Dev/lcs-hackathon/**)",
+      "Bash(gh pr:*)",
+      "Bash(git config:*)",
+      "Read(//c/Users/syeda/**)"
+    ]
+  }
+}

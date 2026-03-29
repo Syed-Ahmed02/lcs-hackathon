@@ -8,8 +8,13 @@
  * @module
  */
 
+import type * as aiActions from "../aiActions.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
+import type * as insights from "../insights.js";
+import type * as linking from "../linking.js";
+import type * as sessions from "../sessions.js";
+import type * as tabDecisions from "../tabDecisions.js";
 import type * as users from "../users.js";
 
 import type {
@@ -19,8 +24,13 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  aiActions: typeof aiActions;
   auth: typeof auth;
   http: typeof http;
+  insights: typeof insights;
+  linking: typeof linking;
+  sessions: typeof sessions;
+  tabDecisions: typeof tabDecisions;
   users: typeof users;
 }>;
 

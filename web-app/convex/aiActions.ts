@@ -15,7 +15,7 @@ export const summarizeSession = internalAction({
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey) return;
 
-    const rollup = (await ctx.runQuery(internal.aiActions.getRollup, {
+    const rollup = (await ctx.runQuery(internal.insights.getRollup, {
       rollupId: args.rollupId,
     })) as Doc<"insightRollups"> | null;
     if (!rollup) return;
@@ -109,15 +109,5 @@ export const classifyTab = internalAction({
     const reasoning = text.includes(":") ? text.split(":").slice(1).join(":").trim() : undefined;
 
     return { decision, reasoning };
-  },
-});
-
-// Internal query to fetch a rollup (used by the action above)
-import { internalQuery } from "./_generated/server";
-
-export const getRollup = internalQuery({
-  args: { rollupId: v.id("insightRollups") },
-  handler: async (ctx, args) => {
-    return await ctx.db.get(args.rollupId);
   },
 });

@@ -1,4 +1,4 @@
-import { internalMutation, mutation, query } from "./_generated/server";
+import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 
@@ -87,6 +87,14 @@ export const computeSessionRollup = mutation({
     });
 
     return rollupId;
+  },
+});
+
+// Internal: fetch a rollup by id (used by aiActions.summarizeSession in Node runtime)
+export const getRollup = internalQuery({
+  args: { rollupId: v.id("insightRollups") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.rollupId);
   },
 });
 
