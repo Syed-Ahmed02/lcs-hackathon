@@ -7,8 +7,8 @@
 body {
   width: 340px;
   min-height: 200px;
-  background: #0c0c16;
-  color: #e4e4eb;
+  background: #0b0f19;
+  color: #e2e8f0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   font-size: 13.5px;
   -webkit-font-smoothing: antialiased;
@@ -27,7 +27,7 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 0.875rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
 }
 
 .popup-header .logo {
@@ -36,9 +36,9 @@ body {
   justify-content: center;
   width: 26px;
   height: 26px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
+  border-radius: 7px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
   flex-shrink: 0;
 }
 
@@ -106,8 +106,8 @@ body {
   flex-direction: column;
   gap: 0.375rem;
   padding: 0.625rem 0.75rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(59, 130, 246, 0.03);
+  border: 1px solid rgba(59, 130, 246, 0.08);
   border-radius: 8px;
   counter-reset: steps;
   list-style: none;
@@ -131,8 +131,8 @@ body {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.5);
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
   font-size: 0.625rem;
   font-weight: 600;
   flex-shrink: 0;
@@ -165,8 +165,8 @@ label {
 
 input[type="text"], textarea {
   width: 100%;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(59, 130, 246, 0.04);
+  border: 1px solid rgba(59, 130, 246, 0.1);
   border-radius: 8px;
   padding: 0.5rem 0.75rem;
   color: #fff;
@@ -179,9 +179,9 @@ input[type="text"], textarea {
 }
 
 input[type="text"]:focus, textarea:focus {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.04);
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.06);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
 }
 
 input[type="text"]::placeholder, textarea::placeholder {
@@ -216,24 +216,24 @@ input[type="text"]::placeholder, textarea::placeholder {
 }
 
 .btn-primary {
-  background: #fff;
-  color: #0c0c16;
+  background: #3b82f6;
+  color: #fff;
   width: 100%;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.92);
+  background: #60a5fa;
 }
 
 .btn-danger {
-  background: rgba(239, 68, 68, 0.12);
+  background: rgba(239, 68, 68, 0.1);
   color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.16);
   width: 100%;
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.18);
+  background: rgba(239, 68, 68, 0.16);
 }
 
 .btn-ghost {
@@ -305,18 +305,18 @@ input[type="text"]::placeholder, textarea::placeholder {
 
 /* ── Session card ── */
 .session-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(59, 130, 246, 0.03);
+  border: 1px solid rgba(59, 130, 246, 0.08);
   border-radius: 10px;
   padding: 0.75rem;
 }
 
 .session-card-active {
-  border-color: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.14);
   background: linear-gradient(
     to bottom,
     rgba(34, 197, 94, 0.04) 0%,
-    rgba(255, 255, 255, 0.02) 100%
+    rgba(59, 130, 246, 0.02) 100%
   );
 }
 
@@ -366,8 +366,8 @@ input[type="text"]::placeholder, textarea::placeholder {
 .spinner {
   width: 14px;
   height: 14px;
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  border-top-color: rgba(255, 255, 255, 0.6);
+  border: 1.5px solid rgba(59, 130, 246, 0.15);
+  border-top-color: #3b82f6;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
   display: inline-block;
@@ -387,7 +387,7 @@ input[type="text"]::placeholder, textarea::placeholder {
 /* ── Divider ── */
 .divider {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(59, 130, 246, 0.08);
   margin: 0.125rem 0;
 }
 

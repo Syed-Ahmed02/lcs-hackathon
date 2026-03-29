@@ -73,7 +73,7 @@ export function SessionCard() {
           <CardTitle className="text-sm font-semibold">Active Session</CardTitle>
           <Badge variant={activeSession ? "default" : "secondary"} className="gap-1.5">
             <Circle
-              className={`size-1.5 fill-current ${activeSession ? "text-green-400" : "text-muted-foreground"}`}
+              className={`size-1.5 fill-current ${activeSession ? "text-primary" : "text-muted-foreground"}`}
             />
             {activeSession ? "Live" : "Inactive"}
           </Badge>
