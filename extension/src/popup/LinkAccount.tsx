@@ -39,8 +39,8 @@ export function LinkAccount({ onLinked }: Props) {
     <div className="popup-body">
       <div style={{ textAlign: 'center', paddingBottom: '0.5rem' }}>
         <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔗</div>
-        <p style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>
-          Open your dashboard, go to <strong style={{ color: 'rgba(255,255,255,0.8)' }}>Link Extension</strong>, and enter the code below.
+        <p style={{ fontSize: '0.8125rem', color: 'var(--muted-foreground)', lineHeight: 1.5 }}>
+          Open your dashboard, go to <strong style={{ color: 'var(--foreground)' }}>Link Extension</strong>, and enter the code below.
         </p>
       </div>
 

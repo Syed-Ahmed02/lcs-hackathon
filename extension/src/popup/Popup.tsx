@@ -30,7 +30,6 @@ export function Popup() {
   return (
     <>
       <div className="popup-header">
-        <span className="logo">🔒</span>
         <h1>Focus Guard</h1>
       </div>
 

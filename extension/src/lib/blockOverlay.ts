@@ -18,13 +18,14 @@
     position: 'fixed',
     inset: '0',
     zIndex: '2147483647',
-    background: 'linear-gradient(135deg, #0a0a14 0%, #0f0f1e 100%)',
+    background:
+      'linear-gradient(135deg, oklch(0.145 0 0) 0%, oklch(0.2 0.05 302) 100%)',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
-    color: '#ffffff',
+    color: 'oklch(0.985 0 0)',
     padding: '2rem',
     boxSizing: 'border-box',
   })
@@ -39,14 +40,14 @@
       <div style="
         width: 72px;
         height: 72px;
-        background: rgba(255,255,255,0.06);
+        background: oklch(1 0 0 / 8%);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 0 auto 1.5rem;
         font-size: 2rem;
-        border: 1.5px solid rgba(255,255,255,0.12);
+        border: 1.5px solid oklch(1 0 0 / 12%);
       ">🔒</div>
 
       <h1 style="
@@ -54,21 +55,21 @@
         font-weight: 700;
         margin: 0 0 0.5rem;
         letter-spacing: -0.02em;
-        color: #fff;
+        color: oklch(0.985 0 0);
       ">Focus Mode Active</h1>
 
       <p style="
         font-size: 0.8125rem;
-        color: rgba(255,255,255,0.4);
+        color: oklch(0.708 0 0);
         margin: 0 0 1.5rem;
         word-break: break-all;
         font-family: 'SF Mono', 'Fira Code', monospace;
       ">${escapeHtml(blockedUrl)}</p>
 
       <div style="
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 12px;
+        background: oklch(0.205 0 0);
+        border: 1px solid oklch(1 0 0 / 10%);
+        border-radius: 0.75rem;
         padding: 1rem 1.25rem;
         margin-bottom: 2rem;
         text-align: left;
@@ -78,12 +79,12 @@
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.08em;
-          color: rgba(255,255,255,0.4);
+          color: oklch(0.708 0 0);
           margin: 0 0 0.375rem;
         ">Reason</p>
         <p style="
           font-size: 0.9375rem;
-          color: rgba(255,255,255,0.85);
+          color: oklch(0.985 0 0);
           margin: 0;
           line-height: 1.5;
         ">${escapeHtml(reason)}</p>
@@ -91,9 +92,9 @@
 
       <button id="__fg_allow" style="
         padding: 0.75rem 2.5rem;
-        border-radius: 10px;
-        background: rgba(255,255,255,0.9);
-        color: #0a0a14;
+        border-radius: 0.625rem;
+        background: oklch(0.438 0.218 303.724);
+        color: oklch(0.977 0.014 308.299);
         font-weight: 600;
         font-size: 0.9375rem;
         border: none;
@@ -104,8 +105,9 @@
 
       <p style="
         font-size: 0.75rem;
-        color: rgba(255,255,255,0.25);
+        color: oklch(0.708 0 0);
         margin: 1.25rem 0 0;
+        opacity: 0.65;
       ">Focus Guard · Your AI productivity assistant</p>
     </div>
 
@@ -115,7 +117,7 @@
         to   { opacity: 1; transform: scale(1); }
       }
       #__fg_allow:hover {
-        background: #ffffff !important;
+        background: oklch(0.5 0.22 302) !important;
         transform: scale(1.02);
       }
       #__fg_allow:active {
