@@ -64,25 +64,30 @@ export const summarizeSession = internalAction({
   },
 });
 
-// Classify whether a tab URL/title is a distraction given a focus goal
+// Classify whether page content aligns with the focus goal (extension supplies excerpt + metadata)
 export const classifyTab = internalAction({
   args: {
     url: v.string(),
     title: v.string(),
     domain: v.string(),
     goalDescription: v.optional(v.string()),
+    pageContentExcerpt: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey) return { decision: "allowed" as const, reasoning: "No API key configured" };
 
     const goal = args.goalDescription ?? "general productivity";
+    const content =
+      args.pageContentExcerpt?.trim() ??
+      "(no page content excerpt; use title and domain only)";
     const prompt = [
       `You are a focus assistant helping someone stay on task.`,
       `Their goal: "${goal}".`,
-      `They just switched to a tab: "${args.title}" (${args.domain}).`,
-      `Reply with exactly one word — "blocked" or "allowed" — followed by a colon and a short reason (max 15 words).`,
-      `Example: blocked: social media is off-task during coding sessions.`,
+      `They are viewing a tab: "${args.title}" (${args.domain}).`,
+      `Visible page content excerpt (may be truncated): ${content}`,
+      `Decide if this page content aligns with their goal. Reply with exactly one word — "blocked" or "allowed" — followed by a colon and a short reason (max 15 words).`,
+      `Example: blocked: content is entertainment, not related to the stated task.`,
     ].join(" ");
 
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {

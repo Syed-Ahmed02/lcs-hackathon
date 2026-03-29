@@ -1,6 +1,7 @@
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
+import { requireUserId } from "./lib/user";
 
 // Get the most recent insight rollup for the signed-in user
 export const getLatestInsights = query({
@@ -8,11 +9,12 @@ export const getLatestInsights = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return null;
+    const userId = requireUserId(identity);
 
     return await ctx.db
       .query("insightRollups")
-      .withIndex("by_token_and_period", (q) =>
-        q.eq("tokenIdentifier", identity.tokenIdentifier).eq("period", "session"),
+      .withIndex("by_user_and_period", (q) =>
+        q.eq("userId", userId).eq("period", "session"),
       )
       .order("desc")
       .first();
@@ -25,10 +27,11 @@ export const getInsightHistory = query({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return [];
+    const userId = requireUserId(identity);
 
     return await ctx.db
       .query("insightRollups")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .order("desc")
       .take(args.limit ?? 10);
   },
@@ -40,9 +43,10 @@ export const computeSessionRollup = mutation({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthenticated");
+    const userId = requireUserId(identity);
 
     const session = await ctx.db.get(args.sessionId);
-    if (!session || session.tokenIdentifier !== identity.tokenIdentifier) {
+    if (!session || session.userId !== userId) {
       throw new Error("Session not found");
     }
 
@@ -67,7 +71,7 @@ export const computeSessionRollup = mutation({
       .map(([domain, count]) => ({ domain, count }));
 
     const rollupId = await ctx.db.insert("insightRollups", {
-      tokenIdentifier: identity.tokenIdentifier,
+      userId,
       sessionId: args.sessionId,
       period: "session",
       periodStart: session.startedAt,

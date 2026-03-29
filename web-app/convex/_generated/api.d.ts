@@ -12,6 +12,7 @@ import type * as aiActions from "../aiActions.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as insights from "../insights.js";
+import type * as lib_user from "../lib/user.js";
 import type * as linking from "../linking.js";
 import type * as sessions from "../sessions.js";
 import type * as tabDecisions from "../tabDecisions.js";
@@ -28,6 +29,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
   insights: typeof insights;
+  "lib/user": typeof lib_user;
   linking: typeof linking;
   sessions: typeof sessions;
   tabDecisions: typeof tabDecisions;

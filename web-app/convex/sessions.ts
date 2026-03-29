@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { requireUserId } from "./lib/user";
 
 // Get the currently active focus session for the signed-in user
 export const getActiveSession = query({
@@ -7,11 +8,12 @@ export const getActiveSession = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return null;
+    const userId = requireUserId(identity);
 
     return await ctx.db
       .query("focusSessions")
-      .withIndex("by_token_and_status", (q) =>
-        q.eq("tokenIdentifier", identity.tokenIdentifier).eq("status", "active"),
+      .withIndex("by_user_and_status", (q) =>
+        q.eq("userId", userId).eq("status", "active"),
       )
       .order("desc")
       .first();
@@ -24,10 +26,11 @@ export const getRecentSessions = query({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return [];
+    const userId = requireUserId(identity);
 
     return await ctx.db
       .query("focusSessions")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .order("desc")
       .take(args.limit ?? 10);
   },
@@ -39,12 +42,13 @@ export const startSession = mutation({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthenticated");
+    const userId = requireUserId(identity);
 
     // End any currently active session first
     const active = await ctx.db
       .query("focusSessions")
-      .withIndex("by_token_and_status", (q) =>
-        q.eq("tokenIdentifier", identity.tokenIdentifier).eq("status", "active"),
+      .withIndex("by_user_and_status", (q) =>
+        q.eq("userId", userId).eq("status", "active"),
       )
       .first();
 
@@ -53,7 +57,7 @@ export const startSession = mutation({
     }
 
     return await ctx.db.insert("focusSessions", {
-      tokenIdentifier: identity.tokenIdentifier,
+      userId,
       startedAt: Date.now(),
       goalDescription: args.goalDescription,
       status: "active",
@@ -67,9 +71,10 @@ export const endSession = mutation({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthenticated");
+    const userId = requireUserId(identity);
 
     const session = await ctx.db.get(args.sessionId);
-    if (!session || session.tokenIdentifier !== identity.tokenIdentifier) {
+    if (!session || session.userId !== userId) {
       throw new Error("Session not found");
     }
 

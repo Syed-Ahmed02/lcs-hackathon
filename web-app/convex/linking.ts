@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { requireUserId } from "./lib/user";
 
 const CODE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -20,11 +21,12 @@ export const generateLinkCode = mutation({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthenticated");
+    const userId = requireUserId(identity);
 
     // Invalidate any existing unused codes for this user
     const existing = await ctx.db
       .query("extensionLinkCodes")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     for (const row of existing) {
@@ -35,7 +37,7 @@ export const generateLinkCode = mutation({
 
     const code = generateCode();
     await ctx.db.insert("extensionLinkCodes", {
-      tokenIdentifier: identity.tokenIdentifier,
+      userId,
       code,
       expiresAt: Date.now() + CODE_TTL_MS,
     });
@@ -50,10 +52,11 @@ export const getActiveLinkCode = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return null;
+    const userId = requireUserId(identity);
 
     const row = await ctx.db
       .query("extensionLinkCodes")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .order("desc")
       .first();
 
@@ -62,7 +65,7 @@ export const getActiveLinkCode = query({
   },
 });
 
-// Exchange a link code from the extension — returns the tokenIdentifier if valid
+// Exchange a link code from the extension — returns userId for Convex auth setup
 export const exchangeLinkCode = mutation({
   args: { code: v.string() },
   handler: async (ctx, args) => {
@@ -71,11 +74,11 @@ export const exchangeLinkCode = mutation({
       .withIndex("by_code", (q) => q.eq("code", args.code.toUpperCase()))
       .unique();
 
-    if (!row) return { success: false, reason: "Invalid code" };
-    if (row.usedAt) return { success: false, reason: "Code already used" };
-    if (row.expiresAt < Date.now()) return { success: false, reason: "Code expired" };
+    if (!row) return { success: false as const, reason: "Invalid code" };
+    if (row.usedAt) return { success: false as const, reason: "Code already used" };
+    if (row.expiresAt < Date.now()) return { success: false as const, reason: "Code expired" };
 
     await ctx.db.patch(row._id, { usedAt: Date.now() });
-    return { success: true, tokenIdentifier: row.tokenIdentifier };
+    return { success: true as const, userId: row.userId };
   },
 });

@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { requireUserId } from "./lib/user";
 
 // Get recent tab decisions for the signed-in user (across all sessions)
 export const getRecentDecisions = query({
@@ -7,12 +8,11 @@ export const getRecentDecisions = query({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return [];
+    const userId = requireUserId(identity);
 
     return await ctx.db
       .query("tabDecisions")
-      .withIndex("by_token_and_decided_at", (q) =>
-        q.eq("tokenIdentifier", identity.tokenIdentifier),
-      )
+      .withIndex("by_user_and_decided_at", (q) => q.eq("userId", userId))
       .order("desc")
       .take(args.limit ?? 20);
   },
@@ -24,6 +24,10 @@ export const getSessionDecisions = query({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return [];
+    const userId = requireUserId(identity);
+
+    const session = await ctx.db.get(args.sessionId);
+    if (!session || session.userId !== userId) return [];
 
     return await ctx.db
       .query("tabDecisions")
@@ -33,7 +37,7 @@ export const getSessionDecisions = query({
   },
 });
 
-// Record a tab snapshot and AI/manual decision
+// Record a tab snapshot and AI/manual decision (called from web or extension with auth)
 export const recordTabDecision = mutation({
   args: {
     sessionId: v.id("focusSessions"),
@@ -43,31 +47,42 @@ export const recordTabDecision = mutation({
     decision: v.union(v.literal("allowed"), v.literal("blocked")),
     source: v.union(v.literal("ai"), v.literal("manual")),
     reasoning: v.optional(v.string()),
+    pageContentExcerpt: v.optional(v.string()),
+    contentHash: v.optional(v.string()),
+    confidence: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthenticated");
+    const userId = requireUserId(identity);
 
-    // Record the snapshot first
+    const session = await ctx.db.get(args.sessionId);
+    if (!session || session.userId !== userId) {
+      throw new Error("Session not found");
+    }
+
     const snapshotId = await ctx.db.insert("tabSnapshots", {
       sessionId: args.sessionId,
-      tokenIdentifier: identity.tokenIdentifier,
+      userId,
       url: args.url,
       title: args.title,
       capturedAt: Date.now(),
+      pageContentExcerpt: args.pageContentExcerpt,
+      contentHash: args.contentHash,
     });
 
-    // Record the decision
     return await ctx.db.insert("tabDecisions", {
       sessionId: args.sessionId,
-      tokenIdentifier: identity.tokenIdentifier,
+      userId,
       snapshotId,
       url: args.url,
       domain: args.domain,
       title: args.title,
+      pageContentExcerpt: args.pageContentExcerpt,
       decision: args.decision,
       source: args.source,
       reasoning: args.reasoning,
+      confidence: args.confidence,
       decidedAt: Date.now(),
     });
   },
@@ -82,9 +97,10 @@ export const overrideDecision = mutation({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthenticated");
+    const userId = requireUserId(identity);
 
     const existing = await ctx.db.get(args.decisionId);
-    if (!existing || existing.tokenIdentifier !== identity.tokenIdentifier) {
+    if (!existing || existing.userId !== userId) {
       throw new Error("Decision not found");
     }
 
