@@ -11,8 +11,91 @@ type ClassifyResult = {
   decisionId: Id<"tabDecisions">;
 };
 
-// Classify a tab and record the decision — called from the extension background worker.
-// Uses Node runtime to call the OpenRouter API (same as aiActions.classifyTab).
+// ---------------------------------------------------------------------------
+// Classification helper — inlined to avoid cross-Node-action ctx.runAction calls
+// ---------------------------------------------------------------------------
+
+async function classifyPageAlignment(
+  url: string,
+  title: string,
+  domain: string,
+  goalDescription: string | undefined,
+  pageContentExcerpt: string | undefined,
+): Promise<{ decision: "allowed" | "blocked"; reasoning: string }> {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) {
+    return { decision: "allowed", reasoning: "No API key configured" };
+  }
+
+  const goal = goalDescription?.trim() || "general productivity";
+  const content = pageContentExcerpt?.trim() || "(no page content available)";
+
+  const systemPrompt =
+    `You are a focus session enforcer. Decide if a webpage is aligned with the user's session goal. ` +
+    `Reply with valid JSON only: {"decision":"allowed","reasoning":"..."} or {"decision":"blocked","reasoning":"..."}. ` +
+    `Keep reasoning under 15 words. Be strict — block anything not directly relevant to the goal.`;
+
+  const userPrompt =
+    `Session goal: "${goal}"\n` +
+    `Page: "${title}" (${domain})\n` +
+    `Content excerpt: ${content.slice(0, 1500)}`;
+
+  let response: Response;
+  try {
+    response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://focus-guard.app",
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        max_tokens: 80,
+        temperature: 0,
+        response_format: { type: "json_object" },
+      }),
+    });
+  } catch (err) {
+    console.error("[FocusGuard] OpenRouter fetch error:", err);
+    return { decision: "allowed", reasoning: "Network error during classification" };
+  }
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    console.error("[FocusGuard] OpenRouter error:", response.status, body);
+    return { decision: "allowed", reasoning: "Classification service error" };
+  }
+
+  const data = (await response.json()) as {
+    choices?: Array<{ message?: { content?: string } }>;
+  };
+
+  const raw = data.choices?.[0]?.message?.content?.trim() ?? "";
+  console.log("[FocusGuard] Classification raw response:", raw);
+
+  try {
+    const parsed = JSON.parse(raw) as { decision?: string; reasoning?: string };
+    const decision =
+      parsed.decision === "blocked" ? ("blocked" as const) : ("allowed" as const);
+    return { decision, reasoning: parsed.reasoning ?? "" };
+  } catch {
+    // Fallback: scan the raw string
+    const decision = raw.toLowerCase().includes('"blocked"')
+      ? ("blocked" as const)
+      : ("allowed" as const);
+    return { decision, reasoning: "Could not parse model response" };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Public action — called from the extension background worker
+// ---------------------------------------------------------------------------
+
 export const classifyAndRecord = action({
   args: {
     extensionToken: v.string(),
@@ -31,14 +114,14 @@ export const classifyAndRecord = action({
     });
     if (!userId) throw new Error("Invalid extension token");
 
-    // Run AI classification
-    const { decision, reasoning } = (await ctx.runAction(internal.aiActions.classifyTab, {
-      url: args.url,
-      title: args.title,
-      domain: args.domain,
-      goalDescription: args.goalDescription,
-      pageContentExcerpt: args.pageContentExcerpt,
-    })) as { decision: "allowed" | "blocked"; reasoning?: string };
+    // Classify inline (same Node runtime — no cross-action call needed)
+    const { decision, reasoning } = await classifyPageAlignment(
+      args.url,
+      args.title,
+      args.domain,
+      args.goalDescription,
+      args.pageContentExcerpt,
+    );
 
     // Persist the decision
     const decisionId: Id<"tabDecisions"> = await ctx.runMutation(
