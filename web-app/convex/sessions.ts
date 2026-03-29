@@ -1,5 +1,6 @@
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { internal } from "./_generated/api";
 import { requireUserId } from "./lib/user";
 
 // Get the currently active focus session for the signed-in user
@@ -79,6 +80,11 @@ export const endSession = mutation({
     }
 
     await ctx.db.patch(args.sessionId, { status: "completed", endedAt: Date.now() });
+
+    await ctx.scheduler.runAfter(0, internal.extensionApi.computeSessionRollupInternal, {
+      userId,
+      sessionId: args.sessionId,
+    });
   },
 });
 
