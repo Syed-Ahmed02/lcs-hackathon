@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "AI-powered focus session manager that blocks distracting tabs.",
 
-  "permissions": ["tabs", "activeTab", "storage", "scripting"],
+  "permissions": ["tabs", "activeTab", "storage", "scripting", "webNavigation"],
 
   "host_permissions": ["<all_urls>"],
 

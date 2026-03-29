@@ -30,6 +30,23 @@ chrome.tabs.onActivated.addListener(async ({ tabId }) => {
   await handleTabNavigation(tabId, tab.url, tab.title ?? '')
 })
 
+// SPA navigations (YouTube, Twitter, etc.) use the History API to change
+// the URL without a full page reload. This listener catches those.
+// A short delay lets the SPA update the page title and content before we classify.
+chrome.webNavigation.onHistoryStateUpdated.addListener(async (details) => {
+  if (details.frameId !== 0) return
+  const url = details.url
+  if (!url) return
+  await new Promise((r) => setTimeout(r, 1500))
+  let tab: chrome.tabs.Tab
+  try {
+    tab = await chrome.tabs.get(details.tabId)
+  } catch {
+    return
+  }
+  await handleTabNavigation(details.tabId, url, tab.title ?? '')
+})
+
 // ---------------------------------------------------------------------------
 // Core navigation handler
 // ---------------------------------------------------------------------------
@@ -37,8 +54,19 @@ chrome.tabs.onActivated.addListener(async ({ tabId }) => {
 // Track in-flight classifications to avoid duplicate requests
 const classifying = new Set<string>()
 
+async function removeBlockOverlay(tabId: number): Promise<void> {
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      func: () => {
+        const el = document.getElementById('__focus-guard-overlay')
+        if (el) el.remove()
+      },
+    })
+  } catch { /* ignore — tab may not support scripting */ }
+}
+
 async function handleTabNavigation(tabId: number, url: string, title: string): Promise<void> {
-  // Skip extension pages and browser internals
   if (
     url.startsWith('chrome://') ||
     url.startsWith('chrome-extension://') ||
@@ -52,11 +80,12 @@ async function handleTabNavigation(tabId: number, url: string, title: string): P
 
   const cacheKey = buildCacheKey(url)
 
-  // Check decision cache first
   const cached = await getCachedDecision(cacheKey)
   if (cached) {
     if (cached.decision === 'blocked') {
-      await injectBlockOverlay(tabId, url, cached.reasoning ?? 'This page does not align with your focus goal.', cached.decisionId)
+      await injectBlockOverlay(tabId, url, cached.reasoning ?? 'This page does not align with your focus goal.', cached.decisionId, session.goalDescription)
+    } else {
+      await removeBlockOverlay(tabId)
     }
     return
   }
@@ -95,14 +124,16 @@ async function handleTabNavigation(tabId: number, url: string, title: string): P
       cachedAt: Date.now(),
     })
 
-    // Enforce — inject overlay if blocked
     if (result.decision === 'blocked') {
       await injectBlockOverlay(
         tabId,
         url,
         result.reasoning ?? 'This page does not align with your focus goal.',
         result.decisionId,
+        session.goalDescription,
       )
+    } else {
+      await removeBlockOverlay(tabId)
     }
   } catch (err) {
     console.error('[FocusGuard] Classification error:', err)
@@ -139,16 +170,16 @@ async function injectBlockOverlay(
   url: string,
   reason: string,
   decisionId: string,
+  goalDescription?: string,
 ): Promise<void> {
   try {
-    // First, pass context to the overlay script via window.__overlayArgs
     await chrome.scripting.executeScript({
       target: { tabId },
-      func: (args: { reason: string; decisionId: string; blockedUrl: string }) => {
+      func: (args: { reason: string; decisionId: string; blockedUrl: string; goalDescription?: string }) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ;(window as any).__overlayArgs = args
       },
-      args: [{ reason, decisionId, blockedUrl: url }],
+      args: [{ reason, decisionId, blockedUrl: url, goalDescription }],
     })
 
     // Inject the overlay script
