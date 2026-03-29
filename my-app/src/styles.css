@@ -1,0 +1,3 @@
+@import "../web-app/app/globals.css";
+
+@source "./**/*.{ts,tsx}";
