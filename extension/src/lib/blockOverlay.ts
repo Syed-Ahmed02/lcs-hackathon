@@ -23,7 +23,7 @@
     position: 'fixed',
     inset: '0',
     zIndex: '2147483647',
-    background: '#0c0c16',
+    background: '#0b0f19',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -31,7 +31,7 @@
     overflowY: 'auto',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
     fontSize: '16px',
-    color: '#ffffff',
+    color: '#e2e8f0',
     padding: '2rem',
     boxSizing: 'border-box',
     zoom: '1',
@@ -73,7 +73,7 @@
       text-align: center;
       animation: __fg_fadein 0.25s ease;
     ">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 0 1rem;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(59,130,246,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 0 1rem;">
         <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
         <line x1="9" y1="9" x2="15" y2="15" />
         <line x1="15" y1="9" x2="9" y2="15" />
@@ -130,11 +130,11 @@
           flex: 1;
           padding: 0.5rem 1rem;
           border-radius: 8px;
-          background: rgba(255,255,255,0.06);
+          background: rgba(59,130,246,0.08);
           color: rgba(255,255,255,0.6);
           font-weight: 600;
           font-size: 0.8125rem;
-          border: 1px solid rgba(255,255,255,0.08);
+          border: 1px solid rgba(59,130,246,0.15);
           cursor: pointer;
           transition: background 0.15s, transform 0.1s;
         ">Go back</button>
@@ -142,11 +142,11 @@
           flex: 1;
           padding: 0.5rem 1rem;
           border-radius: 8px;
-          background: rgba(255,255,255,0.08);
-          color: rgba(255,255,255,0.7);
+          background: rgba(59,130,246,0.12);
+          color: rgba(96,165,250,0.9);
           font-weight: 600;
           font-size: 0.8125rem;
-          border: 1px solid rgba(255,255,255,0.1);
+          border: 1px solid rgba(59,130,246,0.2);
           cursor: pointer;
           transition: background 0.15s, transform 0.1s;
         ">Allow this page</button>
@@ -165,8 +165,8 @@
         from { opacity: 0; transform: translateY(6px); }
         to   { opacity: 1; transform: translateY(0); }
       }
-      #__fg_allow:hover { background: rgba(255,255,255,0.12) !important; color: #fff !important; }
-      #__fg_back:hover  { background: rgba(255,255,255,0.1) !important; color: #fff !important; }
+      #__fg_allow:hover { background: rgba(59,130,246,0.2) !important; color: #60a5fa !important; }
+      #__fg_back:hover  { background: rgba(59,130,246,0.15) !important; color: #fff !important; }
       #__fg_allow:active, #__fg_back:active { transform: scale(0.97); }
     </style>
   `
