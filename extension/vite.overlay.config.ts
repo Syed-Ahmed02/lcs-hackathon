@@ -1,19 +1,19 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
-// Builds content/extractor.js (IIFE, injected into pages)
+// Builds content/overlay.js (IIFE, injected into blocked pages)
 export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: false,
     lib: {
-      entry: resolve(__dirname, 'src/lib/contentExtractor.ts'),
+      entry: resolve(__dirname, 'src/lib/blockOverlay.ts'),
       formats: ['iife'],
-      name: 'FocusGuardExtractor',
+      name: 'FocusGuardOverlay',
     },
     rollupOptions: {
       output: {
-        entryFileNames: 'content/extractor.js',
+        entryFileNames: 'content/overlay.js',
       },
     },
   },

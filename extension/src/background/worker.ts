@@ -5,7 +5,6 @@ import {
   setCachedDecision,
   updateCachedDecisionToAllowed,
   clearDecisionCache,
-  clearActiveSession,
 } from '../lib/storage'
 import { extClassifyAndRecord, extRecordManualOverride } from '../lib/convex'
 import type { BackgroundMessage } from '../lib/types'

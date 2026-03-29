@@ -11,8 +11,6 @@ export const convexClient = new ConvexHttpClient(CONVEX_URL)
 // api.ts import is needed from this separate package
 // ---------------------------------------------------------------------------
 
-type AnyFunction = (client: ConvexHttpClient, ...args: unknown[]) => Promise<unknown>
-
 function call<T>(
   method: 'query' | 'mutation' | 'action',
   path: string,
@@ -43,7 +41,7 @@ export function extEndSession(extensionToken: string, sessionId: string) {
 }
 
 export function extClassifyAndRecord(args: ClassifyArgs): Promise<ClassifyResult> {
-  return call<ClassifyResult>('action', 'extensionApiActions:classifyAndRecord', args)
+  return call<ClassifyResult>('action', 'extensionApiActions:classifyAndRecord', args as unknown as Record<string, unknown>)
 }
 
 export function extRecordManualOverride(
