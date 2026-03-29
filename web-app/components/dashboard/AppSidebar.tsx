@@ -11,7 +11,6 @@ import {
   Brain,
   ChevronsUpDown,
   LogOut,
-  Settings,
 } from "lucide-react";
 
 import {
@@ -187,8 +186,8 @@ export function AppSidebar() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem render={<Link href="/dashboard/link" />}>
-                  <Settings />
-                  Settings
+                  <Link2 />
+                  Link Extension
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />

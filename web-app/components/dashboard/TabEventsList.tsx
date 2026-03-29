@@ -36,14 +36,14 @@ export function TabEventsList() {
             No tab decisions yet. Start a session and open some tabs.
           </p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {decisions.map((d) => (
               <div
                 key={d._id}
                 className="flex items-center justify-between gap-3 rounded-md border px-3 py-2 text-sm"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium">{d.title || d.domain}</p>
+                  <p className="truncate text-sm font-medium">{d.title || d.domain}</p>
                   <p className="truncate text-xs text-muted-foreground">{d.domain}</p>
                 </div>
                 <div className="flex shrink-0 items-center gap-1.5">

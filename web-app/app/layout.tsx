@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Geist_Mono, DM_Sans } from "next/font/google"
 
 import "./globals.css"
@@ -5,6 +6,14 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+
+export const metadata: Metadata = {
+  title: {
+    default: "FocusGuard",
+    template: "%s · FocusGuard",
+  },
+  description: "Stay on task. Track your browsing habits and block distractions during focus sessions.",
+};
 
 const dmSans = DM_Sans({subsets:['latin'],variable:'--font-sans'})
 

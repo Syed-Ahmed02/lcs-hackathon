@@ -12,28 +12,28 @@ const statConfig = [
     label: "Distraction Rate",
     icon: ShieldAlert,
     color: "text-destructive",
-    bg: "bg-destructive/10",
+    bg: "bg-destructive/8",
   },
   {
     key: "blockedCount",
     label: "Tabs Blocked",
     icon: ShieldAlert,
     color: "text-orange-600 dark:text-orange-400",
-    bg: "bg-orange-500/10",
+    bg: "bg-orange-500/8",
   },
   {
     key: "allowedCount",
     label: "Tabs Allowed",
     icon: ShieldCheck,
     color: "text-green-600 dark:text-green-400",
-    bg: "bg-green-500/10",
+    bg: "bg-green-500/8",
   },
   {
     key: "totalDecisions",
     label: "Total Decisions",
     icon: MousePointerClick,
     color: "text-primary",
-    bg: "bg-primary/10",
+    bg: "bg-primary/8",
   },
 ] as const;
 
@@ -77,10 +77,10 @@ export function InsightCards() {
           return (
             <Card key={c.key}>
               <CardContent className="pt-5 pb-4">
-                <div className={`mb-3 inline-flex rounded-lg p-2 ${c.bg}`}>
+                <div className={`mb-2.5 inline-flex rounded-lg p-2 ${c.bg}`}>
                   <Icon className={`size-4 ${c.color}`} />
                 </div>
-                <p className="text-2xl font-bold">{values[c.key]}</p>
+                <p className="text-xl font-bold tabular-nums">{values[c.key]}</p>
                 <p className="mt-0.5 text-xs text-muted-foreground">{c.label}</p>
               </CardContent>
             </Card>
@@ -91,7 +91,7 @@ export function InsightCards() {
       {insight.topBlockedDomains.length > 0 && (
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm">Top Distraction Domains</CardTitle>
+            <CardTitle className="text-sm font-semibold">Top Distraction Domains</CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
             <div className="space-y-2">
@@ -112,7 +112,7 @@ export function InsightCards() {
       {insight.summaryText && (
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm">
+            <CardTitle className="flex items-center gap-2 text-sm font-semibold">
               <Sparkles className="size-4 text-primary" />
               AI Summary
             </CardTitle>
