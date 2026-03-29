@@ -1,8 +1,15 @@
 "use node";
 
-import { action } from "./_generated/server";
+import { action, type ActionCtx } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
+import type { Id } from "./_generated/dataModel";
+
+type ClassifyResult = {
+  decision: "allowed" | "blocked";
+  reasoning?: string;
+  decisionId: Id<"tabDecisions">;
+};
 
 // Classify a tab and record the decision — called from the extension background worker.
 // Uses Node runtime to call the OpenRouter API (same as aiActions.classifyTab).
@@ -17,9 +24,9 @@ export const classifyAndRecord = action({
     pageContentExcerpt: v.optional(v.string()),
     contentHash: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx: ActionCtx, args): Promise<ClassifyResult> => {
     // Validate token server-side
-    const userId = await ctx.runQuery(internal.extensionApi.resolveToken, {
+    const userId: string | null = await ctx.runQuery(internal.extensionApi.resolveToken, {
       extensionToken: args.extensionToken,
     });
     if (!userId) throw new Error("Invalid extension token");
@@ -34,7 +41,7 @@ export const classifyAndRecord = action({
     })) as { decision: "allowed" | "blocked"; reasoning?: string };
 
     // Persist the decision
-    const decisionId = await ctx.runMutation(
+    const decisionId: Id<"tabDecisions"> = await ctx.runMutation(
       internal.extensionApi.recordTabDecisionInternal,
       {
         userId,
