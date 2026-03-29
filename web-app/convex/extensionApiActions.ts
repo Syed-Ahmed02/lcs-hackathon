@@ -11,6 +11,89 @@ type ClassifyResult = {
   decisionId: Id<"tabDecisions">;
 };
 
+const BROAD_CONTENT_DOMAINS = [
+  "youtube.com",
+  "youtu.be",
+  "reddit.com",
+  "x.com",
+  "twitter.com",
+  "facebook.com",
+  "instagram.com",
+  "tiktok.com",
+  "linkedin.com",
+] as const;
+
+const GOAL_STOP_WORDS = new Set([
+  "a",
+  "an",
+  "and",
+  "are",
+  "be",
+  "do",
+  "for",
+  "going",
+  "have",
+  "i",
+  "im",
+  "in",
+  "is",
+  "me",
+  "my",
+  "need",
+  "no",
+  "of",
+  "on",
+  "so",
+  "study",
+  "studying",
+  "that",
+  "the",
+  "this",
+  "to",
+  "want",
+  "with",
+]);
+
+function normalizeText(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9\s]/g, " ");
+}
+
+function extractGoalKeywords(goalDescription: string | undefined): string[] {
+  if (!goalDescription) return [];
+  const tokens = normalizeText(goalDescription)
+    .split(/\s+/)
+    .filter((token) => token.length >= 3 && !GOAL_STOP_WORDS.has(token));
+
+  return [...new Set(tokens)];
+}
+
+function hostMatchesBroadPlatform(domain: string): boolean {
+  const host = domain.toLowerCase();
+  return BROAD_CONTENT_DOMAINS.some(
+    (candidate) => host === candidate || host.endsWith(`.${candidate}`),
+  );
+}
+
+function shouldAllowBroadPlatformPage(
+  url: string,
+  title: string,
+  domain: string,
+  goalDescription: string | undefined,
+  pageContentExcerpt: string | undefined,
+): boolean {
+  if (!hostMatchesBroadPlatform(domain)) return false;
+
+  const keywords = extractGoalKeywords(goalDescription);
+  if (keywords.length === 0) return false;
+
+  const haystack = normalizeText(
+    `${url} ${title} ${pageContentExcerpt ?? ""}`.slice(0, 4000),
+  );
+
+  const matchingKeywords = keywords.filter((keyword) => haystack.includes(keyword));
+  return matchingKeywords.length >= 1;
+}
+
 // ---------------------------------------------------------------------------
 // Classification helper — inlined to avoid cross-Node-action ctx.runAction calls
 // ---------------------------------------------------------------------------
@@ -27,17 +110,37 @@ async function classifyPageAlignment(
     return { decision: "allowed", reasoning: "No API key configured" };
   }
 
+  if (
+    shouldAllowBroadPlatformPage(
+      url,
+      title,
+      domain,
+      goalDescription,
+      pageContentExcerpt,
+    )
+  ) {
+    return {
+      decision: "allowed",
+      reasoning: "Relevant learning content on a broad platform",
+    };
+  }
+
   const goal = goalDescription?.trim() || "general productivity";
   const content = pageContentExcerpt?.trim() || "(no page content available)";
 
   const systemPrompt =
     `You are a focus session enforcer. Decide if a webpage is aligned with the user's session goal. ` +
     `Reply with valid JSON only: {"decision":"allowed","reasoning":"..."} or {"decision":"blocked","reasoning":"..."}. ` +
-    `Keep reasoning under 15 words. Be strict — block anything not directly relevant to the goal.`;
+    `Keep reasoning under 15 words. ` +
+    `Allow relevant educational, reference, research, or task-supporting pages even on usually distracting platforms. ` +
+    `Do not block a page only because the site is YouTube, Reddit, or social media if the title/content clearly matches the goal. ` +
+    `Use the page title and content as stronger evidence than the domain. ` +
+    `Block pages that are entertainment, scrolling, or off-goal.`;
 
   const userPrompt =
     `Session goal: "${goal}"\n` +
     `Page: "${title}" (${domain})\n` +
+    `URL: ${url}\n` +
     `Content excerpt: ${content.slice(0, 1500)}`;
 
   let response: Response;

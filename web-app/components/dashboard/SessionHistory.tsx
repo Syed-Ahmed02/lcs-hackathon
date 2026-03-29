@@ -65,14 +65,14 @@ export function SessionHistory() {
         {sessions.length === 0 ? (
           <p className="text-sm text-muted-foreground">No sessions recorded yet.</p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {sessions.map((s) => {
               const status = statusVariant[s.status] ?? statusVariant.abandoned;
               return (
                 <div key={s._id} className="rounded-md border px-3 py-2.5 text-sm">
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0 flex-1">
-                      <p className="truncate font-medium">
+                      <p className="truncate text-sm font-medium">
                         {s.goalDescription ?? "Focus session"}
                       </p>
                       <p className="text-xs text-muted-foreground">
@@ -80,7 +80,7 @@ export function SessionHistory() {
                       </p>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs tabular-nums text-muted-foreground">
                         {formatDuration(s.startedAt, s.endedAt)}
                       </span>
                       <Badge variant="outline" className={status.className}>
