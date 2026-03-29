@@ -51,7 +51,7 @@ export function TabEventsList() {
                     variant={d.decision === "blocked" ? "destructive" : "outline"}
                     className={
                       d.decision === "allowed"
-                        ? "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400"
+                        ? "border-primary/30 bg-primary/10 text-primary"
                         : ""
                     }
                   >
