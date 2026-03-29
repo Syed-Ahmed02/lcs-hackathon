@@ -4,18 +4,8 @@ import { Authenticated, Unauthenticated } from "convex/react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowRight,
-  BarChart3,
-  LayoutDashboard,
-  LogOut,
-  Play,
-  Shield,
-  ShieldAlert,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowRight, BarChart3, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
+import { VideoPlayer } from "@/components/ui/video-thumbnail-player";
 
 function LogoMark({ className }: { className?: string }) {
   return (
@@ -125,113 +115,19 @@ function HeroAuth() {
   );
 }
 
-function ExtensionMock() {
-  return (
-    <div className="relative w-full max-w-[340px] rounded-2xl border border-white/10 bg-zinc-900/90 p-5 shadow-2xl shadow-black/50 ring-1 ring-white/[0.04]">
-      <div className="mb-4 flex items-center gap-2">
-        <LogoMark className="size-8 rounded-lg [&_svg]:size-4" />
-        <span className="text-sm font-semibold text-white">FocusFlow</span>
-      </div>
-      <p className="mb-1 text-[10px] font-medium tracking-widest text-zinc-500 uppercase">Focus goal</p>
-      <div className="mb-4 rounded-xl border border-white/10 bg-zinc-950/80 px-3 py-3 text-xs leading-relaxed text-zinc-500">
-        e.g. Write unit tests for the auth module
-      </div>
-      <button
-        type="button"
-        className="w-full rounded-xl bg-white py-3 text-sm font-medium text-zinc-950"
-        tabIndex={-1}
-      >
-        Start Focus Session
-      </button>
-      <p className="mt-4 border-t border-white/10 pt-4 text-center text-xs text-zinc-500">Unlink account</p>
-    </div>
-  );
-}
-
-function OverviewMock({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn(
-        "relative overflow-hidden rounded-2xl border border-white/10 bg-white text-zinc-900 shadow-2xl ring-1 ring-white/6",
-        className,
-      )}
-    >
-      <div className="flex gap-0 border-b border-zinc-200">
-        <div className="flex w-48 flex-col gap-1 border-r border-zinc-200 bg-zinc-50 p-3">
-          <div className="mb-2 flex items-center gap-2 px-1">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-[oklch(0.496_0.265_301.924)] text-white">
-              <ShieldCheck className="size-4" />
-            </div>
-            <div>
-              <p className="text-xs font-bold">FocusFlow</p>
-              <p className="text-[10px] text-zinc-500">Dashboard</p>
-            </div>
-          </div>
-          <div className="rounded-md bg-zinc-200/80 px-2 py-1.5 text-[10px] font-medium">Overview</div>
-          <div className="px-2 py-1 text-[10px] text-zinc-500">Session History</div>
-          <div className="px-2 py-1 text-[10px] text-zinc-500">Insights</div>
-        </div>
-        <div className="min-h-[220px] flex-1 p-4">
-          <h3 className="text-sm font-semibold">Overview</h3>
-          <p className="text-[10px] text-zinc-500">Monitor your focus sessions and tab decisions in real time.</p>
-          <div className="mt-3 rounded-xl border border-zinc-200 bg-zinc-50 p-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium">Active Session</span>
-              <span className="rounded-full bg-zinc-200 px-2 py-0.5 text-[9px] text-zinc-600">Inactive</span>
-            </div>
-            <p className="mt-2 text-[10px] text-zinc-500">Start a focus session to track your tab activity.</p>
-            <div className="mt-2 rounded-lg border border-zinc-200 bg-white px-2 py-2 text-[10px] text-zinc-400">
-              What are you focusing on?
-            </div>
-            <div className="mt-2 inline-flex items-center gap-1 rounded-lg bg-[oklch(0.496_0.265_301.924)] px-3 py-1.5 text-[10px] font-medium text-white">
-              <Play className="size-3 fill-current" />
-              Start
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-4 gap-2 p-3">
-        {[
-          { label: "Distraction", value: "9%", icon: ShieldAlert, color: "text-red-500" },
-          { label: "Blocked", value: "1", icon: Shield, color: "text-orange-500" },
-          { label: "Allowed", value: "10", icon: ShieldCheck, color: "text-emerald-600" },
-          { label: "Decisions", value: "11", icon: Sparkles, color: "text-[oklch(0.496_0.265_301.924)]" },
-        ].map((m) => (
-          <div key={m.label} className="rounded-lg border border-zinc-200 bg-zinc-50 p-2 text-center">
-            <m.icon className={`mx-auto mb-1 size-4 ${m.color}`} />
-            <p className="text-sm font-semibold">{m.value}</p>
-            <p className="text-[9px] text-zinc-500">{m.label}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function WindowChrome({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="overflow-hidden rounded-xl border border-zinc-700/80 bg-zinc-950 shadow-[0_32px_100px_-16px_rgba(0,0,0,0.72)] ring-1 ring-white/10">
-      <div className="flex h-9 shrink-0 items-center gap-2 border-b border-zinc-800/90 bg-zinc-900 px-3">
-        <div className="flex gap-1.5 pl-0.5" aria-hidden>
-          <span className="size-2.5 rounded-full bg-[#ff5f57] ring-1 ring-black/10" />
-          <span className="size-2.5 rounded-full bg-[#febc2e] ring-1 ring-black/10" />
-          <span className="size-2.5 rounded-full bg-[#28c840] ring-1 ring-black/10" />
-        </div>
-        <span className="flex-1 text-center text-[11px] font-medium tracking-tight text-zinc-500">{title}</span>
-        <div className="w-11 shrink-0" aria-hidden />
-      </div>
-      <div className="bg-zinc-950">{children}</div>
-    </div>
-  );
-}
-
-
+const heroCanvasBackground = [
+  "radial-gradient(ellipse 85% 70% at 22% 32%, oklch(0.42 0.09 230 / 0.5), transparent 58%)",
+  "radial-gradient(ellipse 95% 80% at 78% 58%, oklch(0.38 0.07 155 / 0.42), transparent 52%)",
+  "radial-gradient(ellipse 100% 55% at 48% 100%, oklch(0.36 0.06 75 / 0.38), transparent 48%)",
+  "linear-gradient(168deg, oklch(0.2 0.03 255) 0%, oklch(0.17 0.035 210) 38%, oklch(0.14 0.03 145) 100%)",
+].join(", ");
 
 function HeroShowcase() {
   return (
     <div className="relative mt-14 sm:mt-20">
       <div
         className="relative left-1/2 w-screen max-w-none -translate-x-1/2 border-y border-white/10 px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 md:pb-24"
+        style={{ background: heroCanvasBackground }}
       >
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.14] mix-blend-overlay"
@@ -240,17 +136,15 @@ function HeroShowcase() {
           }}
         />
         <div className="relative mx-auto max-w-6xl">
-          <div id="product" className="relative scroll-mt-28 pb-8 md:pb-28 lg:pb-32">
-            <div className="relative mx-auto w-full max-w-5xl">
-              <WindowChrome title="FocusFlow">
-                <OverviewMock className="rounded-none border-0 shadow-none ring-0" />
-              </WindowChrome>
-              <div
-                id="extension"
-                className="relative z-10 mx-auto mt-8 w-full max-w-[340px] scroll-mt-28 md:absolute md:-bottom-8 md:left-0 md:mx-0 md:mt-0 md:max-w-[300px] lg:-bottom-10 lg:max-w-[320px]"
-              >
-                <ExtensionMock />
-              </div>
+          <div id="product" className="relative scroll-mt-28 pb-4">
+            <div id="extension" className="mx-auto w-full max-w-2xl p-4">
+              <VideoPlayer
+                thumbnailUrl="https://images.unsplash.com/photo-1593642532454-e138e28a63f4?q=80&w=2069&auto=format&fit=crop"
+                videoUrl="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                title="See FocusFlow in action"
+                description="Dashboard, focus sessions, and tab intelligence."
+                className="rounded-xl border border-white/10 shadow-2xl ring-1 ring-white/10"
+              />
             </div>
           </div>
         </div>
