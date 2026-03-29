@@ -7,16 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, BarChart3, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
 import { VideoPlayer } from "@/components/ui/video-thumbnail-player";
 import { ScrollReveal } from "@/components/landing/scroll-reveal";
-
-function LogoMark({ className }: { className?: string }) {
-  return (
-    <div
-      className={`flex size-9 items-center justify-center rounded-xl bg-zinc-800 ring-1 ring-white/10 ${className ?? ""}`}
-    >
-      <ShieldCheck className="size-5 text-white" strokeWidth={2} />
-    </div>
-  );
-}
+import { FocusFlowLogo } from "@/components/brand/FocusFlowLogo";
 
 function Nav() {
   return (
@@ -26,7 +17,7 @@ function Nav() {
           href="/"
           className="flex items-center gap-2.5 rounded-lg outline-offset-2 transition-opacity duration-200 hover:opacity-90"
         >
-          <LogoMark className="size-8 rounded-lg [&_svg]:size-4" />
+          <FocusFlowLogo size={32} alt="" className="size-8 rounded-xl" />
           <span className="text-sm font-semibold tracking-tight text-white">FocusFlow</span>
         </Link>
         <nav className="hidden items-center gap-8 text-sm text-zinc-400 md:flex">
@@ -216,7 +207,7 @@ function Footer() {
         <div className="flex flex-col gap-8 md:flex-row md:justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <LogoMark className="size-8 rounded-lg [&_svg]:size-4" />
+              <FocusFlowLogo size={32} alt="" className="size-8 rounded-xl" />
               <span className="font-semibold text-white">FocusFlow</span>
             </div>
             <p className="mt-2 max-w-xs text-sm text-zinc-500">

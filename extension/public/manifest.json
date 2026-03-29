@@ -13,9 +13,22 @@
     "type": "module"
   },
 
+  "icons": {
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+
   "action": {
     "default_popup": "popup.html",
-    "default_title": "FocusFlow"
+    "default_title": "FocusFlow",
+    "default_icon": {
+      "16": "logo.png",
+      "32": "logo.png",
+      "48": "logo.png",
+      "128": "logo.png"
+    }
   },
 
   "web_accessible_resources": [

@@ -13,6 +13,11 @@ export const metadata: Metadata = {
     template: "%s · FocusFlow",
   },
   description: "Stay on task. Track your browsing habits and block distractions during focus sessions.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 const dmSans = DM_Sans({subsets:['latin'],variable:'--font-sans'})

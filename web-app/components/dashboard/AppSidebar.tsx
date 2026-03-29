@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   History,
   Link2,
-  ShieldCheck,
   Brain,
   ChevronsUpDown,
   LogOut,
@@ -35,6 +34,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FocusFlowLogo } from "@/components/brand/FocusFlowLogo";
 
 const navItems = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -70,9 +70,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<Link href="/dashboard" />}>
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <ShieldCheck className="size-4" />
-              </div>
+              <FocusFlowLogo size={32} alt="" className="size-8 rounded-xl ring-sidebar-border" />
               <div className="flex flex-col gap-0.5 leading-none">
                 <span className="font-semibold">FocusFlow</span>
                 <span className="text-xs text-muted-foreground">Dashboard</span>
