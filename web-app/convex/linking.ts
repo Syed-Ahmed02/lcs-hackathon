@@ -65,7 +65,7 @@ export const getActiveLinkCode = query({
   },
 });
 
-// Exchange a link code from the extension — returns userId for Convex auth setup
+// Exchange a link code from the extension — returns userId + long-lived extensionToken
 export const exchangeLinkCode = mutation({
   args: { code: v.string() },
   handler: async (ctx, args) => {
@@ -78,7 +78,14 @@ export const exchangeLinkCode = mutation({
     if (row.usedAt) return { success: false as const, reason: "Code already used" };
     if (row.expiresAt < Date.now()) return { success: false as const, reason: "Code expired" };
 
-    await ctx.db.patch(row._id, { usedAt: Date.now() });
-    return { success: true as const, userId: row.userId };
+    // Generate a cryptographically random 32-byte hex token for the extension to use
+    const tokenBytes = new Uint8Array(32);
+    crypto.getRandomValues(tokenBytes);
+    const extensionToken = Array.from(tokenBytes)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+
+    await ctx.db.patch(row._id, { usedAt: Date.now(), extensionToken });
+    return { success: true as const, userId: row.userId, extensionToken };
   },
 });

@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Focus Guard",
+  "version": "1.0.0",
+  "description": "AI-powered focus session manager that blocks distracting tabs.",
+
+  "permissions": ["tabs", "activeTab", "storage", "scripting"],
+
+  "host_permissions": ["<all_urls>"],
+
+  "background": {
+    "service_worker": "background/worker.js",
+    "type": "module"
+  },
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Focus Guard"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["content/extractor.js", "content/overlay.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

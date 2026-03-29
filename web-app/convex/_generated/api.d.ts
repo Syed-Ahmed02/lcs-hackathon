@@ -10,6 +10,8 @@
 
 import type * as aiActions from "../aiActions.js";
 import type * as auth from "../auth.js";
+import type * as extensionApi from "../extensionApi.js";
+import type * as extensionApiActions from "../extensionApiActions.js";
 import type * as http from "../http.js";
 import type * as insights from "../insights.js";
 import type * as lib_user from "../lib/user.js";
@@ -27,6 +29,8 @@ import type {
 declare const fullApi: ApiFromModules<{
   aiActions: typeof aiActions;
   auth: typeof auth;
+  extensionApi: typeof extensionApi;
+  extensionApiActions: typeof extensionApiActions;
   http: typeof http;
   insights: typeof insights;
   "lib/user": typeof lib_user;

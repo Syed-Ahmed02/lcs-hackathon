@@ -75,7 +75,9 @@ export default defineSchema({
     code: v.string(),
     expiresAt: v.number(),
     usedAt: v.optional(v.number()),
+    extensionToken: v.optional(v.string()),
   })
     .index("by_code", ["code"])
-    .index("by_user", ["userId"]),
+    .index("by_user", ["userId"])
+    .index("by_token", ["extensionToken"]),
 });
