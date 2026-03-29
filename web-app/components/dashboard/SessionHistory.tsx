@@ -2,6 +2,9 @@
 
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function formatDuration(startedAt: number, endedAt?: number) {
   const ms = (endedAt ?? Date.now()) - startedAt;
@@ -19,59 +22,78 @@ function formatDate(ts: number) {
   });
 }
 
+const statusVariant: Record<string, { label: string; className: string }> = {
+  active: {
+    label: "Active",
+    className:
+      "border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400",
+  },
+  completed: {
+    label: "Completed",
+    className: "border-primary/30 bg-primary/10 text-primary",
+  },
+  abandoned: {
+    label: "Abandoned",
+    className: "border-muted bg-muted text-muted-foreground",
+  },
+};
+
 export function SessionHistory() {
   const sessions = useQuery(api.sessions.getRecentSessions, { limit: 10 });
 
   if (sessions === undefined) {
     return (
-      <div className="rounded-xl border bg-card p-5">
-        <h3 className="mb-4 font-semibold">Session History</h3>
-        <div className="space-y-2">
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-semibold">Session History</CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0 space-y-2">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="bg-muted h-14 animate-pulse rounded-md" />
+            <Skeleton key={i} className="h-14 rounded-md" />
           ))}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="rounded-xl border bg-card p-5">
-      <h3 className="mb-4 font-semibold">Session History</h3>
-      {sessions.length === 0 ? (
-        <p className="text-muted-foreground text-sm">No sessions recorded yet.</p>
-      ) : (
-        <div className="space-y-2">
-          {sessions.map((s) => (
-            <div key={s._id} className="rounded-md border px-3 py-2.5 text-sm">
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium truncate">
-                    {s.goalDescription ?? "Focus session"}
-                  </p>
-                  <p className="text-muted-foreground text-xs">{formatDate(s.startedAt)}</p>
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm font-semibold">Session History</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-0">
+        {sessions.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No sessions recorded yet.</p>
+        ) : (
+          <div className="space-y-2">
+            {sessions.map((s) => {
+              const status = statusVariant[s.status] ?? statusVariant.abandoned;
+              return (
+                <div key={s._id} className="rounded-md border px-3 py-2.5 text-sm">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-medium">
+                        {s.goalDescription ?? "Focus session"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatDate(s.startedAt)}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
+                      <span className="text-xs text-muted-foreground">
+                        {formatDuration(s.startedAt, s.endedAt)}
+                      </span>
+                      <Badge variant="outline" className={status.className}>
+                        {status.label}
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
-                <div className="shrink-0 flex items-center gap-2">
-                  <span className="text-muted-foreground text-xs">
-                    {formatDuration(s.startedAt, s.endedAt)}
-                  </span>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                      s.status === "active"
-                        ? "bg-green-500/10 text-green-600 dark:text-green-400"
-                        : s.status === "completed"
-                          ? "bg-primary/10 text-primary"
-                          : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {s.status}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+              );
+            })}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

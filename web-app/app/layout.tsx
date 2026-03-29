@@ -4,6 +4,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const dmSans = DM_Sans({subsets:['latin'],variable:'--font-sans'})
 
@@ -25,7 +26,9 @@ export default function RootLayout({
     >
       <body>
         <ConvexClientProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </ThemeProvider>
         </ConvexClientProvider>
       </body>
     </html>

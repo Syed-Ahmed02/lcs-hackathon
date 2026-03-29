@@ -5,7 +5,17 @@
       "Read(//c/Users/syeda/OneDrive/Desktop/Syed/Dev/lcs-hackathon/**)",
       "Bash(gh pr:*)",
       "Bash(git config:*)",
-      "Read(//c/Users/syeda/**)"
+      "Read(//c/Users/syeda/**)",
+      "Bash(npx shadcn@latest add sidebar --yes)",
+      "Bash(npx shadcn@latest add card badge --yes)",
+      "Bash(npx tsc:*)",
+      "Bash(npx shadcn@latest add chart --yes)",
+      "Bash(node -e \"const p = require\\(''./node_modules/@workos-inc/authkit-nextjs/package.json''\\); console.log\\(p.version\\)\")",
+      "Bash(node -e \"const p = require\\(''./node_modules/@workos-inc/authkit-react/package.json''\\); console.log\\(Object.keys\\(p.exports || {}\\).slice\\(0,20\\)\\)\")",
+      "Bash(node -e \"const p = require\\(''''./node_modules/@workos-inc/authkit-nextjs/package.json''''\\); console.log\\(JSON.stringify\\(Object.keys\\(p.exports || p\\), null, 2\\)\\)\")",
+      "Bash(grep -r \"firstName\\\\|lastName\\\\|email\\\\|profilePicture\" node_modules/@workos-inc/node/ --include=*.d.ts)",
+      "Bash(xargs grep:*)",
+      "Bash(npx shadcn@latest add avatar dropdown-menu --yes)"
     ]
   }
 }

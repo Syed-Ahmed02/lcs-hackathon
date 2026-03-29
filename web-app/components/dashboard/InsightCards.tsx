@@ -2,6 +2,40 @@
 
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ShieldAlert, ShieldCheck, MousePointerClick, Sparkles } from "lucide-react";
+
+const statConfig = [
+  {
+    key: "distractionRate",
+    label: "Distraction Rate",
+    icon: ShieldAlert,
+    color: "text-destructive",
+    bg: "bg-destructive/10",
+  },
+  {
+    key: "blockedCount",
+    label: "Tabs Blocked",
+    icon: ShieldAlert,
+    color: "text-orange-600 dark:text-orange-400",
+    bg: "bg-orange-500/10",
+  },
+  {
+    key: "allowedCount",
+    label: "Tabs Allowed",
+    icon: ShieldCheck,
+    color: "text-green-600 dark:text-green-400",
+    bg: "bg-green-500/10",
+  },
+  {
+    key: "totalDecisions",
+    label: "Total Decisions",
+    icon: MousePointerClick,
+    color: "text-primary",
+    bg: "bg-primary/10",
+  },
+] as const;
 
 export function InsightCards() {
   const insight = useQuery(api.insights.getLatestInsights);
@@ -10,7 +44,7 @@ export function InsightCards() {
     return (
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="bg-muted h-24 animate-pulse rounded-xl" />
+          <Skeleton key={i} className="h-24 rounded-xl" />
         ))}
       </div>
     );
@@ -18,60 +52,77 @@ export function InsightCards() {
 
   if (!insight) {
     return (
-      <div className="rounded-xl border bg-card p-5">
-        <p className="text-muted-foreground text-sm">
-          Complete a session to see your insights.
-        </p>
-      </div>
+      <Card>
+        <CardContent className="pt-6">
+          <p className="text-sm text-muted-foreground">
+            Complete a session to see your insights.
+          </p>
+        </CardContent>
+      </Card>
     );
   }
 
-  const cards = [
-    {
-      label: "Distraction Rate",
-      value: `${(insight.distractionRate * 100).toFixed(0)}%`,
-      sub: "of tabs blocked",
-    },
-    { label: "Tabs Blocked", value: String(insight.blockedCount), sub: "last session" },
-    { label: "Tabs Allowed", value: String(insight.allowedCount), sub: "last session" },
-    {
-      label: "Total Decisions",
-      value: String(insight.totalDecisions),
-      sub: "last session",
-    },
-  ];
+  const values: Record<string, string> = {
+    distractionRate: `${(insight.distractionRate * 100).toFixed(0)}%`,
+    blockedCount: String(insight.blockedCount),
+    allowedCount: String(insight.allowedCount),
+    totalDecisions: String(insight.totalDecisions),
+  };
 
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {cards.map((c) => (
-          <div key={c.label} className="rounded-xl border bg-card p-4">
-            <p className="text-muted-foreground text-xs">{c.label}</p>
-            <p className="mt-1 text-2xl font-bold">{c.value}</p>
-            <p className="text-muted-foreground text-xs">{c.sub}</p>
-          </div>
-        ))}
+        {statConfig.map((c) => {
+          const Icon = c.icon;
+          return (
+            <Card key={c.key}>
+              <CardContent className="pt-5 pb-4">
+                <div className={`mb-3 inline-flex rounded-lg p-2 ${c.bg}`}>
+                  <Icon className={`size-4 ${c.color}`} />
+                </div>
+                <p className="text-2xl font-bold">{values[c.key]}</p>
+                <p className="mt-0.5 text-xs text-muted-foreground">{c.label}</p>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {insight.topBlockedDomains.length > 0 && (
-        <div className="rounded-xl border bg-card p-5">
-          <h4 className="mb-3 text-sm font-semibold">Top Distraction Domains</h4>
-          <div className="space-y-2">
-            {insight.topBlockedDomains.map((d) => (
-              <div key={d.domain} className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">{d.domain}</span>
-                <span className="font-medium">{d.count}×</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm">Top Distraction Domains</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="space-y-2">
+              {insight.topBlockedDomains.map((d) => (
+                <div
+                  key={d.domain}
+                  className="flex items-center justify-between rounded-md bg-muted/50 px-3 py-2 text-sm"
+                >
+                  <span className="text-muted-foreground">{d.domain}</span>
+                  <span className="font-semibold tabular-nums">{d.count}×</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       {insight.summaryText && (
-        <div className="rounded-xl border bg-card p-5">
-          <h4 className="mb-2 text-sm font-semibold">AI Summary</h4>
-          <p className="text-muted-foreground text-sm leading-relaxed">{insight.summaryText}</p>
-        </div>
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-sm">
+              <Sparkles className="size-4 text-primary" />
+              AI Summary
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {insight.summaryText}
+            </p>
+          </CardContent>
+        </Card>
       )}
     </div>
   );

@@ -3,6 +3,11 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Timer, Circle } from "lucide-react";
 
 export function SessionCard() {
   const activeSession = useQuery(api.sessions.getActiveSession);
@@ -31,52 +36,61 @@ export function SessionCard() {
     : 0;
 
   return (
-    <div className="rounded-xl border bg-card p-5">
-      <div className="mb-4 flex items-center gap-2">
-        <span
-          className={`h-2.5 w-2.5 rounded-full ${activeSession ? "animate-pulse bg-green-500" : "bg-muted-foreground"}`}
-        />
-        <h3 className="font-semibold">
-          {activeSession ? "Session Active" : "No Active Session"}
-        </h3>
-      </div>
-
-      {activeSession ? (
-        <div className="flex flex-col gap-3">
-          {activeSession.goalDescription && (
-            <p className="text-muted-foreground text-sm">
-              Goal: <span className="text-foreground">{activeSession.goalDescription}</span>
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-base">Active Session</CardTitle>
+          <Badge variant={activeSession ? "default" : "secondary"} className="gap-1.5">
+            <Circle
+              className={`size-2 fill-current ${activeSession ? "text-green-400" : "text-muted-foreground"}`}
+            />
+            {activeSession ? "Live" : "Inactive"}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {activeSession ? (
+          <div className="flex flex-col gap-4">
+            {activeSession.goalDescription && (
+              <p className="text-sm text-muted-foreground">
+                Goal:{" "}
+                <span className="font-medium text-foreground">
+                  {activeSession.goalDescription}
+                </span>
+              </p>
+            )}
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Timer className="size-4" />
+              <span>
+                Running for{" "}
+                <span className="font-semibold text-foreground">{durationMin} min</span>
+              </span>
+            </div>
+            <Button variant="destructive" size="sm" onClick={handleEnd} className="w-fit">
+              End Session
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            <p className="text-sm text-muted-foreground">
+              Start a focus session to track your tab activity.
             </p>
-          )}
-          <p className="text-muted-foreground text-sm">
-            Duration:{" "}
-            <span className="text-foreground font-medium">{durationMin} min</span>
-          </p>
-          <button
-            onClick={handleEnd}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90 mt-1 w-fit rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
-          >
-            End Session
-          </button>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          <input
-            type="text"
-            placeholder="What are you focusing on? (optional)"
-            value={goal}
-            onChange={(e) => setGoal(e.target.value)}
-            className="border-input bg-background rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-          <button
-            onClick={handleStart}
-            disabled={starting}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 w-fit rounded-md px-3 py-1.5 text-sm font-medium transition-colors disabled:opacity-50"
-          >
-            {starting ? "Starting…" : "Start Session"}
-          </button>
-        </div>
-      )}
-    </div>
+            <div className="flex gap-2">
+              <Input
+                type="text"
+                placeholder="What are you focusing on? (optional)"
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && !starting && handleStart()}
+                className="max-w-sm"
+              />
+              <Button onClick={handleStart} disabled={starting} size="sm">
+                {starting ? "Starting…" : "Start"}
+              </Button>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
