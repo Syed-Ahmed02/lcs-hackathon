@@ -1,0 +1,8 @@
+# pnpm should use the global store, not a copy inside the repo
+.pnpm-store/
+
+# Common artifacts
+node_modules/
+dist/
+*.local
+.DS_Store
