@@ -30,8 +30,8 @@ export function Popup() {
   return (
     <>
       <div className="popup-header">
-        <span className="logo">🔒</span>
-        <h1>Focus Guard</h1>
+        <span className="logo" aria-hidden="true">🛡</span>
+        <h1>FocusGuard</h1>
       </div>
 
       {screen === 'loading' && (

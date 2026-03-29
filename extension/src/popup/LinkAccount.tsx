@@ -37,14 +37,11 @@ export function LinkAccount({ onLinked }: Props) {
 
   return (
     <div className="popup-body">
-      <div style={{ textAlign: 'center', paddingBottom: '0.5rem' }}>
-        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔗</div>
-        <p style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>
-          Open your dashboard, go to <strong style={{ color: 'rgba(255,255,255,0.8)' }}>Link Extension</strong>, and enter the code below.
-        </p>
-      </div>
+      <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.55, textAlign: 'center' }}>
+        Open your dashboard, go to <strong style={{ color: 'rgba(255,255,255,0.75)' }}>Link Extension</strong>, and enter the code below.
+      </p>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
         <div>
           <label htmlFor="link-code">Link Code</label>
           <input

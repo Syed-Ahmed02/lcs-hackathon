@@ -118,8 +118,8 @@ export function SessionControls({ extensionToken, onUnlink }: Props) {
     return (
       <div className="popup-body">
         <div className="session-card">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-            <span className="badge badge-allowed">● Active</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.375rem' }}>
+            <span className="badge badge-allowed">Active</span>
             <span className="session-meta">{elapsed}</span>
           </div>
           {session.goalDescription && (
@@ -130,7 +130,7 @@ export function SessionControls({ extensionToken, onUnlink }: Props) {
         {error && <p className="error-text">{error}</p>}
 
         <button className="btn btn-danger" onClick={handleStop} disabled={actionLoading}>
-          {actionLoading ? <><span className="spinner" /> Ending…</> : '⏹ End Session'}
+          {actionLoading ? <><span className="spinner" /> Ending…</> : 'End Session'}
         </button>
 
         <hr className="divider" />
@@ -143,12 +143,12 @@ export function SessionControls({ extensionToken, onUnlink }: Props) {
 
   return (
     <div className="popup-body">
-      <form onSubmit={handleStart} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <form onSubmit={handleStart} style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
         <div>
           <label htmlFor="goal-input">Focus Goal</label>
           <textarea
             id="goal-input"
-            rows={3}
+            rows={2}
             placeholder="e.g. Write unit tests for the auth module"
             value={goal}
             onChange={(e) => setGoal(e.target.value)}
@@ -159,7 +159,7 @@ export function SessionControls({ extensionToken, onUnlink }: Props) {
         {error && <p className="error-text">{error}</p>}
 
         <button type="submit" className="btn btn-primary" disabled={actionLoading}>
-          {actionLoading ? <><span className="spinner" /> Starting…</> : '▶ Start Focus Session'}
+          {actionLoading ? <><span className="spinner" /> Starting…</> : 'Start Focus Session'}
         </button>
       </form>
 

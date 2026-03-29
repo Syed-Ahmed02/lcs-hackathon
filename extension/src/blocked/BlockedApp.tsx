@@ -29,16 +29,18 @@ export function BlockedApp() {
 
   return (
     <div className="blocked-wrap">
+      <div className="blocked-icon" aria-hidden="true">🛡</div>
       <h1>Staying on task</h1>
-      <p>{reason}</p>
+      <p className="blocked-reason">{reason}</p>
       {sessionGoals ? (
-        <p>
-          <strong>Your goals:</strong> {sessionGoals}
-        </p>
+        <div className="blocked-goals">
+          <span className="blocked-goals-label">Your goals</span>
+          <p>{sessionGoals}</p>
+        </div>
       ) : null}
-      <p className="hint">You can allow this page for the rest of this session if it actually supports your work.</p>
+      <p className="hint">You can allow this page for the rest of this session if it supports your work.</p>
       <button type="button" className="primary" disabled={!decisionId || !returnUrl} onClick={allowOnce}>
-        Allow this page for this session
+        Allow for this session
       </button>
       {status ? <p className="hint">{status}</p> : null}
     </div>

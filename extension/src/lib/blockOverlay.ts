@@ -18,7 +18,7 @@
     position: 'fixed',
     inset: '0',
     zIndex: '2147483647',
-    background: 'linear-gradient(135deg, #0a0a14 0%, #0f0f1e 100%)',
+    background: '#0c0c16',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -31,71 +31,64 @@
 
   overlay.innerHTML = `
     <div style="
-      max-width: 540px;
+      max-width: 460px;
       width: 100%;
       text-align: center;
-      animation: __fg_fadein 0.25s ease;
+      animation: __fg_fadein 0.2s ease;
     ">
       <div style="
-        width: 72px;
-        height: 72px;
-        background: rgba(255,255,255,0.06);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
-        font-size: 2rem;
-        border: 1.5px solid rgba(255,255,255,0.12);
-      ">🔒</div>
+        font-size: 2.25rem;
+        margin: 0 0 1.25rem;
+        opacity: 0.85;
+      ">🛡</div>
 
       <h1 style="
-        font-size: 1.75rem;
+        font-size: 1.5rem;
         font-weight: 700;
-        margin: 0 0 0.5rem;
+        margin: 0 0 0.375rem;
         letter-spacing: -0.02em;
         color: #fff;
       ">Focus Mode Active</h1>
 
       <p style="
-        font-size: 0.8125rem;
-        color: rgba(255,255,255,0.4);
-        margin: 0 0 1.5rem;
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.3);
+        margin: 0 0 1.25rem;
         word-break: break-all;
-        font-family: 'SF Mono', 'Fira Code', monospace;
+        font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       ">${escapeHtml(blockedUrl)}</p>
 
       <div style="
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 12px;
-        padding: 1rem 1.25rem;
-        margin-bottom: 2rem;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 10px;
+        padding: 0.875rem 1rem;
+        margin-bottom: 1.75rem;
         text-align: left;
       ">
         <p style="
-          font-size: 0.75rem;
+          font-size: 0.6875rem;
           font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: rgba(255,255,255,0.4);
-          margin: 0 0 0.375rem;
+          letter-spacing: 0.06em;
+          color: rgba(255,255,255,0.35);
+          margin: 0 0 0.3rem;
         ">Reason</p>
         <p style="
-          font-size: 0.9375rem;
-          color: rgba(255,255,255,0.85);
+          font-size: 0.875rem;
+          color: rgba(255,255,255,0.8);
           margin: 0;
           line-height: 1.5;
         ">${escapeHtml(reason)}</p>
       </div>
 
       <button id="__fg_allow" style="
-        padding: 0.75rem 2.5rem;
-        border-radius: 10px;
-        background: rgba(255,255,255,0.9);
-        color: #0a0a14;
+        padding: 0.625rem 2rem;
+        border-radius: 8px;
+        background: #fff;
+        color: #0c0c16;
         font-weight: 600;
-        font-size: 0.9375rem;
+        font-size: 0.875rem;
         border: none;
         cursor: pointer;
         transition: background 0.15s, transform 0.1s;
@@ -103,20 +96,19 @@
       ">Allow for this session</button>
 
       <p style="
-        font-size: 0.75rem;
-        color: rgba(255,255,255,0.25);
+        font-size: 0.6875rem;
+        color: rgba(255,255,255,0.2);
         margin: 1.25rem 0 0;
-      ">Focus Guard · Your AI productivity assistant</p>
+      ">FocusGuard</p>
     </div>
 
     <style>
       @keyframes __fg_fadein {
-        from { opacity: 0; transform: scale(0.97); }
-        to   { opacity: 1; transform: scale(1); }
+        from { opacity: 0; transform: translateY(4px); }
+        to   { opacity: 1; transform: translateY(0); }
       }
       #__fg_allow:hover {
-        background: #ffffff !important;
-        transform: scale(1.02);
+        background: rgba(255,255,255,0.92) !important;
       }
       #__fg_allow:active {
         transform: scale(0.98);
