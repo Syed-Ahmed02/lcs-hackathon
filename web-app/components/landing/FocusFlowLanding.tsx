@@ -128,29 +128,13 @@ function HeroAuth() {
   );
 }
 
-const heroCanvasBackground = [
-  "radial-gradient(ellipse 85% 70% at 22% 32%, oklch(0.42 0.09 230 / 0.5), transparent 58%)",
-  "radial-gradient(ellipse 95% 80% at 78% 58%, oklch(0.38 0.07 155 / 0.42), transparent 52%)",
-  "radial-gradient(ellipse 100% 55% at 48% 100%, oklch(0.36 0.06 75 / 0.38), transparent 48%)",
-  "linear-gradient(168deg, oklch(0.2 0.03 255) 0%, oklch(0.17 0.035 210) 38%, oklch(0.14 0.03 145) 100%)",
-].join(", ");
-
 function HeroShowcase() {
   return (
     <div className="relative mt-14 sm:mt-20">
-      <div
-        className="relative left-1/2 w-screen max-w-none -translate-x-1/2 border-y border-white/10 px-4 pb-14 pt-10 sm:px-6 sm:pb-20 sm:pt-14 md:pb-24"
-        style={{ background: heroCanvasBackground }}
-      >
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.14] mix-blend-overlay"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }}
-        />
+      <div className="relative left-1/2 w-screen max-w-none -translate-x-1/2 px-4 pb-16 pt-12 sm:px-6 sm:pb-20 sm:pt-16">
         <div className="relative mx-auto max-w-6xl">
           <div id="product" className="relative scroll-mt-28 pb-4">
-            <div id="extension" className="mx-auto w-full max-w-2xl p-4">
+            <div id="extension" className="w-full px-2 sm:px-4">
               <div className="animate-landing-fade-scale">
                 <VideoPlayer
                   thumbnailUrl="https://images.unsplash.com/photo-1593642532454-e138e28a63f4?q=80&w=2069&auto=format&fit=crop"
