@@ -89,3 +89,32 @@ export const exchangeLinkCode = mutation({
     return { success: true as const, userId: row.userId, extensionToken };
   },
 });
+
+const TOKEN_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+/** Same as exchangeLinkCode but also issues a long-lived bearer token for Convex HTTP routes. */
+export const exchangeLinkCodeWithToken = mutation({
+  args: { code: v.string() },
+  handler: async (ctx, args) => {
+    const row = await ctx.db
+      .query("extensionLinkCodes")
+      .withIndex("by_code", (q) => q.eq("code", args.code.toUpperCase()))
+      .unique();
+
+    if (!row) return { success: false as const, reason: "Invalid code" as const };
+    if (row.usedAt) return { success: false as const, reason: "Code already used" as const };
+    if (row.expiresAt < Date.now()) return { success: false as const, reason: "Code expired" as const };
+
+    await ctx.db.patch(row._id, { usedAt: Date.now() });
+
+    const token = crypto.randomUUID() + crypto.randomUUID();
+    const expiresAt = Date.now() + TOKEN_TTL_MS;
+    await ctx.db.insert("extensionAuthTokens", {
+      userId: row.userId,
+      token,
+      expiresAt,
+    });
+
+    return { success: true as const, token, expiresAt };
+  },
+});

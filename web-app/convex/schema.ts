@@ -80,4 +80,11 @@ export default defineSchema({
     .index("by_code", ["code"])
     .index("by_user", ["userId"])
     .index("by_token", ["extensionToken"]),
+
+  // Bearer tokens issued after a successful link-code exchange (extension HTTP API)
+  extensionAuthTokens: defineTable({
+    userId: v.string(),
+    token: v.string(),
+    expiresAt: v.number(),
+  }).index("by_token", ["token"]),
 });

@@ -1,35 +1,39 @@
 "use client";
 
-import { Authenticated, Unauthenticated, useQuery } from "convex/react";
+import { Authenticated, Unauthenticated } from "convex/react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
-import { api } from "../convex/_generated/api";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   const { user, signOut } = useAuth();
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <h1>Convex + AuthKit</h1>
         <div className="flex gap-2">
           {user ? (
-            <button onClick={() => signOut()}>Sign out</button>
+            <button type="button" onClick={() => void signOut()}>
+              Sign out
+            </button>
           ) : (
             <>
               <Link href="/sign-in">
-                <button>Sign in</button>
+                <button type="button">Sign in</button>
               </Link>
               <Link href="/sign-up">
-                <button>Sign up</button>
+                <button type="button">Sign up</button>
               </Link>
             </>
           )}
         </div>
       </div>
       <Authenticated>
-        <Button>Dashboard</Button>
+        <Link href="/dashboard" className={cn(buttonVariants({ variant: "default" }))}>
+          Open dashboard
+        </Link>
       </Authenticated>
       <Unauthenticated>
         <p>Please sign in to view data</p>

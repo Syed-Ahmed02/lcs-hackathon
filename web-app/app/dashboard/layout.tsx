@@ -1,5 +1,6 @@
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/dashboard/AppSidebar";
+import { ConvexAuthBanner } from "@/components/dashboard/ConvexAuthBanner";
 import { Separator } from "@/components/ui/separator";
 
 export default function DashboardLayout({
@@ -16,7 +17,10 @@ export default function DashboardLayout({
           <Separator orientation="vertical" className="mr-2 h-4" />
           <span className="text-sm font-medium text-muted-foreground">FocusGuard</span>
         </header>
-        <div className="flex flex-1 flex-col gap-6 p-6">{children}</div>
+        <div className="flex flex-1 flex-col gap-6 p-6">
+          <ConvexAuthBanner />
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

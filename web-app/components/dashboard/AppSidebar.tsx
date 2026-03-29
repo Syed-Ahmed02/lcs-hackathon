@@ -131,30 +131,33 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
-              <DropdownMenuTrigger >
-                <SidebarMenuButton
-                  size="lg"
-                  tooltip={displayName}
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
-                  <Avatar className="size-8 rounded-lg">
-                    <AvatarImage
-                      src={user?.profilePictureUrl ?? undefined}
-                      alt={displayName}
-                    />
-                    <AvatarFallback className="rounded-lg text-xs">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">{displayName}</span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      {user?.email}
-                    </span>
-                  </div>
-                  <ChevronsUpDown className="ml-auto size-4 shrink-0" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
+              {/* render: single control — avoids <button> inside Menu.Trigger’s default <button> (hydration error). */}
+              <DropdownMenuTrigger
+                render={
+                  <SidebarMenuButton
+                    size="lg"
+                    title={displayName}
+                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  >
+                    <Avatar className="size-8 rounded-lg">
+                      <AvatarImage
+                        src={user?.profilePictureUrl ?? undefined}
+                        alt={displayName}
+                      />
+                      <AvatarFallback className="rounded-lg text-xs">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">{displayName}</span>
+                      <span className="truncate text-xs text-muted-foreground">
+                        {user?.email}
+                      </span>
+                    </div>
+                    <ChevronsUpDown className="ml-auto size-4 shrink-0" />
+                  </SidebarMenuButton>
+                }
+              />
 
               <DropdownMenuContent
                 className="w-56 rounded-lg"
